@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Interactive control room for adaptive reinforcement-learning traffic signals.">
+  <title>Signal Lab — Adaptive Traffic Control</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23090d12'/%3E%3Cpath d='M15 3h2v26h-2zM3 15h26v2H3z' fill='%23313a44'/%3E%3Ccircle cx='16' cy='8' r='3' fill='%2326e6a4'/%3E%3Ccircle cx='24' cy='16' r='3' fill='%23ffb84d'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#" aria-label="Signal Lab home">
+      <span class="brand-mark" aria-hidden="true"><i></i><i></i></span>
+      <span>SIGNAL LAB</span>
+    </a>
+    <div class="run-status"><span class="pulse"></span><span id="runStatus">SIMULATION LIVE</span></div>
+    <div class="clock" id="clock">00:00:00</div>
+  </header>
+
+  <main class="shell">
+    <section class="intro">
+      <div>
+        <p class="eyebrow">ADAPTIVE TRAFFIC SIGNAL CONTROL</p>
+        <h1>Intersection <span>control room</span></h1>
+      </div>
+      <p class="intro-copy">Test signal strategies against stochastic demand. The browser simulation mirrors the Python environment’s queue, phase, and safety logic.</p>
+    </section>
+
+    <section class="control-strip" aria-label="Simulation controls">
+      <fieldset class="scenario-picker">
+        <legend>TRAFFIC PROFILE</legend>
+        <div class="segmented" id="scenarioButtons">
+          <button data-scenario="low">Low</button>
+          <button data-scenario="medium" class="active">Medium</button>
+          <button data-scenario="heavy">Heavy</button>
+          <button data-scenario="unbalanced">Unbalanced</button>
+          <button data-scenario="rush">Rush hour</button>
+        </div>
+      </fieldset>
+      <label class="select-wrap">CONTROLLER
+        <select id="controllerSelect">
+          <option value="dqn">DQN · demo policy</option>
+          <option value="heuristic">Queue heuristic</option>
+          <option value="fixed">Fixed time</option>
+          <option value="random">Random</option>
+        </select>
+      </label>
+      <label class="select-wrap small">SPEED
+        <select id="speedSelect">
+          <option value="1">1×</option>
+          <option value="2">2×</option>
+          <option value="5" selected>5×</option>
+          <option value="10">10×</option>
+        </select>
+      </label>
+      <button class="primary-button" id="playButton"><span class="pause-icon">Ⅱ</span><span>Pause run</span></button>
+      <button class="icon-button" id="resetButton" aria-label="Reset simulation" title="Reset simulation">↻</button>
+    </section>
+
+    <section class="metrics" aria-label="Key performance metrics">
+      <article><p>Total queue</p><strong id="totalQueue">0</strong><span class="trend good" id="queueTrend">↓ 0.0%</span></article>
+      <article><p>Average wait</p><strong><span id="avgWait">0.0</span><small>s</small></strong><span class="metric-note">per arrived vehicle</span></article>
+      <article><p>Throughput</p><strong id="throughput">0</strong><span class="metric-note">vehicles processed</span></article>
+      <article><p>Completion</p><strong><span id="completion">0.0</span><small>%</small></strong><span class="metric-note" id="arrivalCount">0 arrivals</span></article>
+      <article><p>Signal changes</p><strong id="switchCount">0</strong><span class="metric-note">safety transitions</span></article>
+    </section>
+
+    <section class="workspace">
+      <article class="panel intersection-panel">
+        <div class="panel-head">
+          <div><p class="panel-kicker">LIVE ENVIRONMENT</p><h2>Four-way intersection</h2></div>
+          <div class="phase-badge" id="phaseBadge"><span></span><b>NS GREEN</b><small id="phaseTimer">0s</small></div>
+        </div>
+        <div class="intersection" id="intersection" aria-label="Animated four-way traffic intersection">
+          <div class="road vertical"><span class="lane-line vertical-line"></span></div>
+          <div class="road horizontal"><span class="lane-line horizontal-line"></span></div>
+          <div class="center-box"><div class="core-mark">SL</div></div>
+          <div class="signal signal-n"><span></span></div>
+          <div class="signal signal-s"><span></span></div>
+          <div class="signal signal-e"><span></span></div>
+          <div class="signal signal-w"><span></span></div>
+          <div class="queue queue-n" data-direction="N"></div>
+          <div class="queue queue-s" data-direction="S"></div>
+          <div class="queue queue-e" data-direction="E"></div>
+          <div class="queue queue-w" data-direction="W"></div>
+          <div class="queue-label label-n"><b>N</b><span id="northQueue">0</span></div>
+          <div class="queue-label label-s"><b>S</b><span id="southQueue">0</span></div>
+          <div class="queue-label label-e"><b>E</b><span id="eastQueue">0</span></div>
+          <div class="queue-label label-w"><b>W</b><span id="westQueue">0</span></div>
+          <div class="direction-hint hint-n">NORTH</div><div class="direction-hint hint-e">EAST</div>
+        </div>
+        <div class="intersection-footer">
+          <span>SIM TIME <b id="simTime">00:00</b></span>
+          <span>ARRIVAL WINDOW <b>30 sec</b></span>
+          <span>EPISODE <b>20 min</b></span>
+        </div>
+      </article>
+
+      <aside class="side-stack">
+        <article class="panel chart-panel">
+          <div class="panel-head compact">
+            <div><p class="panel-kicker">QUEUE PRESSURE</p><h2>Last 120 seconds</h2></div>
+            <div class="legend"><span class="ns">NS</span><span class="ew">EW</span></div>
+          </div>
+          <canvas id="queueChart" width="640" height="240" aria-label="North-south and east-west queue history"></canvas>
+          <div class="axis-labels"><span>-120s</span><span>-60s</span><span>NOW</span></div>
+        </article>
+        <article class="panel policy-panel">
+          <div class="panel-head compact"><div><p class="panel-kicker">POLICY DECISION</p><h2 id="decisionTitle">Hold north–south</h2></div><span class="confidence" id="confidence">84%</span></div>
+          <div class="decision-bars">
+            <div><span>NS demand</span><i><b id="nsDemandBar"></b></i><em id="nsDemand">0</em></div>
+            <div><span>EW demand</span><i><b id="ewDemandBar"></b></i><em id="ewDemand">0</em></div>
+          </div>
+          <p id="decisionCopy">Minimum green protected. Monitoring opposing queue pressure.</p>
+        </article>
+        <article class="panel log-panel">
+          <div class="panel-head compact"><div><p class="panel-kicker">EVENT STREAM</p><h2>Controller log</h2></div><span class="live-tag">LIVE</span></div>
+          <ol id="eventLog" aria-live="polite"></ol>
+        </article>
+      </aside>
+    </section>
+
+    <footer><span>GYMNASIUM ENVIRONMENT · DQN / BASELINE COMPARISON</span><span>1 STEP = 1 SIMULATED SECOND</span></footer>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>

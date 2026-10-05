@@ -1,0 +1,16 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+.idea/
+.vscode/
+.DS_Store
+logs/
+models/**/checkpoints/
+*.pt
+*.pth
+frontend/site-archive.tar.gz
+frontend/.sites-source-git/
