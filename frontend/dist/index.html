@@ -160,6 +160,38 @@
       </aside>
     </section>
 
+    <section class="evidence-panel panel" aria-labelledby="evidenceTitle">
+      <div class="evidence-head">
+        <div><p class="panel-kicker">MEASURED RESULTS</p><h2 id="evidenceTitle">Validated from Python and SUMO runs</h2></div>
+        <div class="evidence-badges"><span>23 TESTS PASSED</span><span>0 SAFETY CONFLICTS</span></div>
+      </div>
+      <div class="evidence-grid">
+        <article class="evidence-card">
+          <p class="evidence-context">2×2 GRID · 10 HELD-OUT SEEDS</p>
+          <h3>Mean vehicle wait</h3>
+          <div class="result-row winner"><span>Shared DQN</span><b>9.35 s</b></div>
+          <div class="result-row"><span>Queue heuristic</span><b>12.15 s</b></div>
+          <div class="result-row"><span>Fixed time</span><b>15.78 s</b></div>
+          <p class="result-note">40.7% lower than fixed time and 23.0% lower than the queue heuristic.</p>
+        </article>
+        <article class="evidence-card">
+          <p class="evidence-context">SUMO LEMGO · 3 SEEDS × 900 S</p>
+          <h3>Aggregate waiting load</h3>
+          <div class="result-row"><span>Native program</span><b>1,191.8</b></div>
+          <div class="result-row winner"><span>Shared DQN</span><b>1,089.0</b></div>
+          <p class="result-note">8.6% lower waiting load, with 232.3 versus 230.0 average arrivals.</p>
+        </article>
+        <article class="evidence-card">
+          <p class="evidence-context">SAFETY + TRADE-OFFS</p>
+          <h3>Honest evaluation</h3>
+          <div class="result-row safe"><span>Recorded collisions</span><b>0 / 0</b></div>
+          <div class="result-row caution"><span>Mean queue</span><b>22.15 vs 20.86</b></div>
+          <p class="result-note">SUMO queue length rose 6.2%, so the policy is promising—not yet production ready.</p>
+        </article>
+      </div>
+      <p class="evidence-footnote">Preliminary research benchmark: three independently trained 30,000-step models. Pedestrians use protected crossings; bicycles and vehicles stop during pedestrian and clearance phases.</p>
+    </section>
+
     <footer><span>GYMNASIUM ENVIRONMENT · DQN / BASELINE COMPARISON</span><span>1 STEP = 1 SIMULATED SECOND</span></footer>
   </main>
   <script src="app.js"></script>

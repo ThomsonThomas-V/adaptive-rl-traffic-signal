@@ -2,7 +2,7 @@
 <configuration>
     <input>
         <net-file value="lemgo.net.xml"/>
-        <route-files value="cars.rou.xml,bikes.rou.xml,pedestrians.rou.xml"/>
+        <route-files value="cars.rou.xml,bikes.rou.xml,pedestrians_safe.rou.xml"/>
     </input>
     <time>
         <begin value="0"/>

@@ -22,6 +22,13 @@ class GridConfig:
     right_turn_ratio: float = 0.10
     pedestrian_rate: float = 0.025
     bicycle_rate: float = 0.035
+    bicycle_service_rate: int = 1
+    pedestrian_service_rate: int = 2
+    safety_cycle_length: int = 30
+    pedestrian_phase_start: int = 24
+    pedestrian_phase_duration: int = 4
+    pre_pedestrian_clearance: int = 1
+    post_pedestrian_clearance: int = 2
     minimum_green_time: int = 5
     yellow_duration: int = 3
     max_queue_length: int = 80
@@ -45,8 +52,9 @@ class TrafficGridEnv(gym.Env[NDArray[np.float32], NDArray[np.int64]]):
         self.config = config or GridConfig()
         self.action_space = spaces.MultiDiscrete(np.full(4, 3, dtype=np.int64))
         # Per node: four queues, pedestrian and bicycle demand, phase, phase
-        # age, and horizontal/vertical neighbor pressure = ten values.
-        self.observation_space = spaces.Box(0.0, 1.0, shape=(40,), dtype=np.float32)
+        # age, horizontal/vertical neighbor pressure, and protected-mode code
+        # = eleven values per agent.
+        self.observation_space = spaces.Box(0.0, 1.0, shape=(44,), dtype=np.float32)
         self.queues = np.zeros((4, 4), dtype=np.int64)
         self.pedestrians = np.zeros(4, dtype=np.int64)
         self.bicycles = np.zeros(4, dtype=np.int64)
@@ -60,7 +68,15 @@ class TrafficGridEnv(gym.Env[NDArray[np.float32], NDArray[np.int64]]):
         self.arrived = 0
         self.processed = 0
         self.total_delay = 0.0
+        self.vehicle_delay = 0.0
+        self.pedestrian_delay = 0.0
+        self.bicycle_delay = 0.0
         self.switches = 0
+        self.pedestrians_arrived = 0
+        self.bicycles_arrived = 0
+        self.pedestrians_served = 0
+        self.bicycles_served = 0
+        self.conflicts = 0
 
     def reset(
         self, *, seed: int | None = None, options: dict[str, Any] | None = None
@@ -80,7 +96,10 @@ class TrafficGridEnv(gym.Env[NDArray[np.float32], NDArray[np.int64]]):
             array.fill(0)
         self.pending.fill(-1)
         self.timestep = self.arrived = self.processed = self.switches = 0
-        self.total_delay = 0.0
+        self.pedestrians_arrived = self.bicycles_arrived = 0
+        self.pedestrians_served = self.bicycles_served = self.conflicts = 0
+        self.total_delay = self.vehicle_delay = 0.0
+        self.pedestrian_delay = self.bicycle_delay = 0.0
         return self._observation(), self._info(False)
 
     def step(
@@ -89,14 +108,22 @@ class TrafficGridEnv(gym.Env[NDArray[np.float32], NDArray[np.int64]]):
         action = np.asarray(action, dtype=np.int64)
         if not self.action_space.contains(action):
             raise ValueError("Grid action must contain four values in {0, 1, 2}")
-        self._apply_actions(action)
+        safety_mode = self.safety_mode()
+        if safety_mode == "vehicle":
+            self._apply_actions(action)
         self._boundary_arrivals()
-        self.total_delay += float(
-            self.queues.sum() + self.pedestrians.sum() + self.bicycles.sum()
-        )
-        passed = self._advance_network()
+        self.vehicle_delay += float(self.queues.sum())
+        self.pedestrian_delay += float(self.pedestrians.sum())
+        self.bicycle_delay += float(self.bicycles.sum())
+        self.total_delay = self.vehicle_delay + self.pedestrian_delay + self.bicycle_delay
+        passed, pedestrians_served, bicycles_served = self._advance_network(safety_mode)
         vulnerable_wait = int(self.pedestrians.sum() + self.bicycles.sum())
-        reward = -0.045 * float(self.queues.sum()) - 0.025 * vulnerable_wait + passed
+        reward = (
+            -0.045 * float(self.queues.sum())
+            - 0.025 * vulnerable_wait
+            + passed
+            + 0.25 * (pedestrians_served + bicycles_served)
+        )
         self.timestep += 1
         truncated = self.timestep >= self.config.episode_length
         return self._observation(), reward, False, truncated, self._info(truncated)
@@ -121,13 +148,39 @@ class TrafficGridEnv(gym.Env[NDArray[np.float32], NDArray[np.int64]]):
                 self.config.max_queue_length, self.queues[node, approach] + count
             )
             self.arrived += count
-        self.pedestrians += self._rng.poisson(self.config.pedestrian_rate, 4)
-        self.bicycles += self._rng.poisson(self.config.bicycle_rate, 4)
+        pedestrian_arrivals = self._rng.poisson(self.config.pedestrian_rate, 4)
+        bicycle_arrivals = self._rng.poisson(self.config.bicycle_rate, 4)
+        self.pedestrians += pedestrian_arrivals
+        self.bicycles += bicycle_arrivals
+        self.pedestrians_arrived += int(pedestrian_arrivals.sum())
+        self.bicycles_arrived += int(bicycle_arrivals.sum())
 
-    def _advance_network(self) -> int:
+    def safety_mode(self, timestep: int | None = None) -> str:
+        """Return ``vehicle``, ``clearance``, or protected ``pedestrian`` mode."""
+        cycle = (self.timestep if timestep is None else timestep) % self.config.safety_cycle_length
+        pedestrian_start = self.config.pedestrian_phase_start
+        pedestrian_end = pedestrian_start + self.config.pedestrian_phase_duration
+        if pedestrian_start <= cycle < pedestrian_end:
+            return "pedestrian"
+        if pedestrian_start - self.config.pre_pedestrian_clearance <= cycle < pedestrian_start:
+            return "clearance"
+        if pedestrian_end <= cycle < pedestrian_end + self.config.post_pedestrian_clearance:
+            return "clearance"
+        return "vehicle"
+
+    def _advance_network(self, safety_mode: str) -> tuple[int, int, int]:
         transfers: list[tuple[int, int]] = []
         processed = 0
+        pedestrians_served = 0
+        bicycles_served = 0
         for node in range(4):
+            if safety_mode == "pedestrian":
+                served = min(self.config.pedestrian_service_rate, int(self.pedestrians[node]))
+                self.pedestrians[node] -= served
+                pedestrians_served += served
+                continue
+            if safety_mode == "clearance":
+                continue
             if self.yellow[node] > 0:
                 self.yellow[node] -= 1
                 if self.yellow[node] == 0:
@@ -152,17 +205,18 @@ class TrafficGridEnv(gym.Env[NDArray[np.float32], NDArray[np.int64]]):
                         processed += 1
                     else:
                         transfers.append(downstream)
-            # Vulnerable users cross the stopped axis in small batches.
-            cross_capacity = 2
-            self.pedestrians[node] = max(0, self.pedestrians[node] - cross_capacity)
-            self.bicycles[node] = max(0, self.bicycles[node] - cross_capacity)
+            served = min(self.config.bicycle_service_rate, int(self.bicycles[node]))
+            self.bicycles[node] -= served
+            bicycles_served += served
         for node, approach in transfers:
             if self.queues[node, approach] < self.config.max_queue_length:
                 self.queues[node, approach] += 1
             else:
                 processed += 1
         self.processed += processed
-        return processed
+        self.pedestrians_served += pedestrians_served
+        self.bicycles_served += bicycles_served
+        return processed, pedestrians_served, bicycles_served
 
     @staticmethod
     def _downstream(node: int, approach: int) -> tuple[int, int] | None:
@@ -194,13 +248,16 @@ class TrafficGridEnv(gym.Env[NDArray[np.float32], NDArray[np.int64]]):
                     min(self.phase_age[node] / 90, 1),
                     min(horizontal / (4 * self.config.max_queue_length), 1),
                     min(vertical / (4 * self.config.max_queue_length), 1),
+                    {"vehicle": 0.0, "clearance": 0.5, "pedestrian": 1.0}[
+                        self.safety_mode()
+                    ],
                 )
             )
         return np.asarray(features, dtype=np.float32)
 
     def agent_observations(self) -> dict[str, NDArray[np.float32]]:
         """Return the centralized observation split into four local agent views."""
-        observation = self._observation().reshape(4, 10)
+        observation = self._observation().reshape(4, 11)
         return {name: observation[index].copy() for index, name in enumerate(self.NODE_NAMES)}
 
     def _info(self, final: bool) -> dict[str, Any]:
@@ -213,12 +270,26 @@ class TrafficGridEnv(gym.Env[NDArray[np.float32], NDArray[np.int64]]):
             "arrived": self.arrived,
             "processed": self.processed,
             "signal_switches": self.switches,
+            "safety_mode": self.safety_mode(),
+            "pedestrians_arrived": self.pedestrians_arrived,
+            "bicycles_arrived": self.bicycles_arrived,
+            "pedestrians_served": self.pedestrians_served,
+            "bicycles_served": self.bicycles_served,
+            "conflicts": self.conflicts,
         }
         if final:
             info.update(
                 average_waiting_time=self.total_delay / max(self.arrived, 1),
                 throughput=self.processed,
                 completion_ratio=self.processed / max(self.arrived, 1),
+                vehicle_average_wait=self.vehicle_delay / max(self.arrived, 1),
+                pedestrian_average_wait=self.pedestrian_delay
+                / max(self.pedestrians_arrived, 1),
+                bicycle_average_wait=self.bicycle_delay / max(self.bicycles_arrived, 1),
+                pedestrian_completion_ratio=self.pedestrians_served
+                / max(self.pedestrians_arrived, 1),
+                bicycle_completion_ratio=self.bicycles_served
+                / max(self.bicycles_arrived, 1),
             )
         return info
 

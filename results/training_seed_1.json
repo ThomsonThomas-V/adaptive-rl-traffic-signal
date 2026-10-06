@@ -1,0 +1,9 @@
+{
+  "seed": 1,
+  "timesteps": 30000,
+  "episodes": 25,
+  "mean_episode_return": 865.3671999999997,
+  "final_episode_return": 1011.1749999999997,
+  "mean_training_loss": 1.4992449746727943,
+  "safety_conflicts": 0
+}

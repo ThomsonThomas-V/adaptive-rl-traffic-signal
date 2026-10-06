@@ -51,6 +51,7 @@ def main() -> None:
         cumulative_waiting = 0.0
         departed = 0
         arrived = 0
+        collisions = 0
 
         for _ in range(args.steps):
             adapter.step()
@@ -62,6 +63,7 @@ def main() -> None:
             cumulative_waiting += waiting
             departed += traci.simulation.getDepartedNumber()
             arrived += traci.simulation.getArrivedNumber()
+            collisions += adapter.collision_count()
 
         result = {
             "scenario": "Central Lemgo, Germany (OpenStreetMap)",
@@ -74,6 +76,7 @@ def main() -> None:
             "departed": departed,
             "arrived": arrived,
             "vehicles_remaining": traci.simulation.getMinExpectedNumber(),
+            "collisions": collisions,
             "peak_controlled_lane_queue": peak_halting,
             "mean_controlled_lane_queue": cumulative_halting / args.steps,
             "mean_controlled_lane_waiting_seconds": cumulative_waiting / args.steps,

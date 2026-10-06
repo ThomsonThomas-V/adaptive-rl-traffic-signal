@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import json
 import random
 from collections import deque
 from dataclasses import dataclass
@@ -19,10 +20,10 @@ from traffic_rl.envs.network_env import GridConfig, TrafficGridEnv
 class SharedQNetwork(nn.Module):
     """One policy shared by all four homogeneous intersection agents."""
 
-    def __init__(self) -> None:
+    def __init__(self, observation_size: int = 11) -> None:
         super().__init__()
         self.layers = nn.Sequential(
-            nn.Linear(10, 128),
+            nn.Linear(observation_size, 128),
             nn.ReLU(),
             nn.Linear(128, 128),
             nn.ReLU(),
@@ -51,6 +52,7 @@ def main() -> None:
     parser.add_argument("--batch-size", type=int, default=128)
     parser.add_argument("--buffer-size", type=int, default=100_000)
     parser.add_argument("--output", type=Path, default=Path("models/grid_shared_dqn.pt"))
+    parser.add_argument("--metrics-output", type=Path, default=None)
     args = parser.parse_args()
 
     random.seed(args.seed)
@@ -59,11 +61,14 @@ def main() -> None:
     rng = np.random.default_rng(args.seed)
     env = TrafficGridEnv(GridConfig())
     env.reset(seed=args.seed)
-    policy, target = SharedQNetwork(), SharedQNetwork()
+    observation_size = next(iter(env.agent_observations().values())).shape[0]
+    policy, target = SharedQNetwork(observation_size), SharedQNetwork(observation_size)
     target.load_state_dict(policy.state_dict())
     optimizer = torch.optim.Adam(policy.parameters(), lr=args.learning_rate)
     replay: deque[Transition] = deque(maxlen=args.buffer_size)
     episode_return = 0.0
+    episode_returns: list[float] = []
+    losses: list[float] = []
 
     for step in range(1, args.timesteps + 1):
         local = env.agent_observations()
@@ -101,10 +106,12 @@ def main() -> None:
             loss.backward()
             nn.utils.clip_grad_norm_(policy.parameters(), 10.0)
             optimizer.step()
+            losses.append(float(loss.item()))
 
         if step % 1_000 == 0:
             target.load_state_dict(policy.state_dict())
         if done:
+            episode_returns.append(episode_return)
             if step % 10_000 < env.config.episode_length:
                 print(f"step={step} return={episode_return:.1f} epsilon={epsilon:.3f}")
             env.reset(seed=args.seed + step)
@@ -116,11 +123,33 @@ def main() -> None:
             "model_state_dict": policy.state_dict(),
             "seed": args.seed,
             "timesteps": args.timesteps,
-            "observation_size": 10,
+            "observation_size": observation_size,
             "actions": 3,
             "agents": list(env.NODE_NAMES),
         },
         args.output,
+    )
+    metrics_output = args.metrics_output or args.output.with_suffix(".training.json")
+    metrics_output.parent.mkdir(parents=True, exist_ok=True)
+    metrics_output.write_text(
+        json.dumps(
+            {
+                "seed": args.seed,
+                "timesteps": args.timesteps,
+                "episodes": len(episode_returns),
+                "mean_episode_return": float(np.mean(episode_returns))
+                if episode_returns
+                else episode_return,
+                "final_episode_return": episode_returns[-1]
+                if episode_returns
+                else episode_return,
+                "mean_training_loss": float(np.mean(losses[-1000:])) if losses else None,
+                "safety_conflicts": env.conflicts,
+            },
+            indent=2,
+        )
+        + "\n",
+        encoding="utf-8",
     )
     env.close()
     print(f"Saved shared multi-agent DQN to {args.output}")

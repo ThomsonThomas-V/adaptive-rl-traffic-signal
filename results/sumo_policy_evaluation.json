@@ -1,0 +1,122 @@
+{
+  "status": "measured",
+  "scenario": "Central Lemgo, Germany (OpenStreetMap)",
+  "model": "models\\grid_shared_dqn_seed_0.pt",
+  "runs": [
+    {
+      "controller": "native",
+      "steps": 900,
+      "seed": 42,
+      "signals": 9,
+      "controlled_lanes": 48,
+      "departed": 426,
+      "arrived": 232,
+      "vehicles_remaining": 269,
+      "mean_queue": 20.557777777777776,
+      "peak_queue": 46.0,
+      "mean_waiting_seconds": 1181.0277777777778,
+      "requested_safe_transitions": 0,
+      "collisions": 0,
+      "collision_details": []
+    },
+    {
+      "controller": "shared_dqn",
+      "steps": 900,
+      "seed": 42,
+      "signals": 9,
+      "controlled_lanes": 48,
+      "departed": 427,
+      "arrived": 238,
+      "vehicles_remaining": 263,
+      "mean_queue": 21.607777777777777,
+      "peak_queue": 44.0,
+      "mean_waiting_seconds": 1067.46,
+      "requested_safe_transitions": 128,
+      "collisions": 0,
+      "collision_details": []
+    },
+    {
+      "controller": "native",
+      "steps": 900,
+      "seed": 43,
+      "signals": 9,
+      "controlled_lanes": 48,
+      "departed": 427,
+      "arrived": 233,
+      "vehicles_remaining": 268,
+      "mean_queue": 20.125555555555554,
+      "peak_queue": 44.0,
+      "mean_waiting_seconds": 1183.5444444444445,
+      "requested_safe_transitions": 0,
+      "collisions": 0,
+      "collision_details": []
+    },
+    {
+      "controller": "shared_dqn",
+      "steps": 900,
+      "seed": 43,
+      "signals": 9,
+      "controlled_lanes": 48,
+      "departed": 429,
+      "arrived": 228,
+      "vehicles_remaining": 273,
+      "mean_queue": 22.855555555555554,
+      "peak_queue": 44.0,
+      "mean_waiting_seconds": 1111.118888888889,
+      "requested_safe_transitions": 127,
+      "collisions": 0,
+      "collision_details": []
+    },
+    {
+      "controller": "native",
+      "steps": 900,
+      "seed": 44,
+      "signals": 9,
+      "controlled_lanes": 48,
+      "departed": 427,
+      "arrived": 225,
+      "vehicles_remaining": 276,
+      "mean_queue": 21.886666666666667,
+      "peak_queue": 45.0,
+      "mean_waiting_seconds": 1210.83,
+      "requested_safe_transitions": 0,
+      "collisions": 0,
+      "collision_details": []
+    },
+    {
+      "controller": "shared_dqn",
+      "steps": 900,
+      "seed": 44,
+      "signals": 9,
+      "controlled_lanes": 48,
+      "departed": 426,
+      "arrived": 231,
+      "vehicles_remaining": 269,
+      "mean_queue": 21.98111111111111,
+      "peak_queue": 49.0,
+      "mean_waiting_seconds": 1088.4622222222222,
+      "requested_safe_transitions": 130,
+      "collisions": 0,
+      "collision_details": []
+    }
+  ],
+  "summary_mean": {
+    "native": {
+      "arrived": 230.0,
+      "vehicles_remaining": 271.0,
+      "mean_queue": 20.856666666666666,
+      "peak_queue": 45.0,
+      "mean_waiting_seconds": 1191.8007407407406,
+      "collisions": 0.0
+    },
+    "shared_dqn": {
+      "arrived": 232.33333333333334,
+      "vehicles_remaining": 268.3333333333333,
+      "mean_queue": 22.14814814814815,
+      "peak_queue": 45.666666666666664,
+      "mean_waiting_seconds": 1089.0137037037039,
+      "collisions": 0.0
+    }
+  },
+  "safety_note": "TraCI requests shorten only active green phases; native yellow/all-red transitions remain in control."
+}

@@ -12,5 +12,6 @@ logs/
 models/**/checkpoints/
 *.pt
 *.pth
+!models/grid_shared_dqn_seed_*.pt
 frontend/site-archive.tar.gz
 frontend/.sites-source-git/

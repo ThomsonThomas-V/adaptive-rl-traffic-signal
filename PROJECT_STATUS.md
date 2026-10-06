@@ -1,61 +1,50 @@
-# Project handoff — 5 October 2026
+# Project handoff — 7 October 2026
 
 ## Completed
 
-- Implemented the custom `TrafficLightEnv` using the current Gymnasium API.
-- Added configurable low, medium, heavy, unbalanced, and rush-hour demand profiles.
-- Added isolated seeded arrival generation so controller actions cannot alter future demand randomness.
-- Implemented yellow safety transitions, minimum and maximum green times, queue limits, overflow tracking, throughput, delay, starvation, and signal-switch metrics.
-- Added fixed-time, queue-heuristic, and seeded random baseline controllers.
-- Added matched-seed multi-scenario evaluation, CSV aggregation, and uncertainty plots.
-- Added Stable-Baselines3 DQN training, checkpoints, TensorBoard output, deterministic evaluation, multi-seed CLI support, reward experiments, and hyperparameter experiments.
-- Added the Pygame renderer and agent-visualization script.
-- Added package metadata, requirements, MIT license, `.gitignore`, and portfolio documentation.
-- Added a responsive interactive frontend under `frontend/dist`.
-- Added the cooperative 2×2 `TrafficGridEnv`, parameter-sharing multi-agent DQN trainer, turning movements, bicycle demand, and pedestrian demand.
-- Added a SUMO/TraCI adapter and reproducible central-Lemgo scenario with cars, bicycles, pedestrians, 9 signal controllers, and 48 controlled lanes.
-- Added a protected 30-second browser safety cycle with curb/stop-line waiting positions and all-red clearance intervals so road users are never paused inside a conflict zone.
-- Published the private frontend at <https://signal-lab-traffic-control.thomsonthomasoffice.chatgpt.site>.
+- Built the original Gymnasium traffic environment, baselines, Stable-Baselines3 DQN workflow, experiment tooling, Pygame renderer, and responsive frontend.
+- Added a cooperative 2×2 environment with four agents, turning traffic, bicycles, pedestrians, network transfer, centralized observations, and local observations.
+- Added an enforced 30-second multimodal safety cycle. Pedestrians cross only in their protected phase; vehicles and bicycles stop during pedestrian and clearance intervals; invalid actions in protected intervals are ignored.
+- Added parameter-sharing multi-agent DQN training and saved three independently initialized 30,000-step policies.
+- Added matched-seed evaluation against fixed-time, queue-heuristic, and random controllers.
+- Added a real central-Lemgo SUMO/TraCI scenario with 9 signal controllers, 48 controlled lanes, protected pedestrian-only routes, and a safe policy adapter that preserves native yellow/all-red transitions.
+- Added native-versus-DQN SUMO evaluation across three matched seeds.
+- Added measured results and honest trade-offs to the browser dashboard and README.
+- Published the frontend privately at <https://signal-lab-traffic-control.thomsonthomasoffice.chatgpt.site>.
 
 ## Verification performed
 
-- `pytest`: **21 passed**.
-- Stable-Baselines3 `check_env`: passed through the environment test suite.
+- `pytest`: **23 passed**.
 - Python source compilation: passed.
-- Pygame RGB rendering: returned a valid `720 × 720 × 3` frame.
-- DQN smoke training: 1,000 steps completed, with model save and reload verified.
-- Evaluation smoke run: all four controllers across all five scenarios completed.
-- Frontend: desktop and 390 px mobile layouts verified with no horizontal overflow.
-- Frontend WebMCP tools registered for configuring the simulation and reading live metrics.
-- Frontend JavaScript syntax validation: passed after the multimodal safety-cycle update.
-- Native SUMO verification: 900 TraCI steps completed on SUMO 1.27.1; results saved in `results/sumo_lemgo_verification.json`.
+- Three grid policies trained for 30,000 steps each and saved under `models/`.
+- Grid evaluation: 10 held-out seeds × 1,200 seconds × all baselines; output saved in `results/multi_agent_evaluation.json`.
+- SUMO 1.27.1 policy evaluation: 3 seeds × 900 seconds × two controllers; output saved in `results/sumo_policy_evaluation.json`.
+- Grid and SUMO evaluations both recorded **zero safety conflicts/collisions**.
+- Frontend results panel shows the exact committed benchmark aggregates and clearly labels the work preliminary.
 
-## Important artifact distinction
+## Measured results
 
-`models/smoke/` and `results/smoke/` validate that the complete pipeline works. They are not converged research results and must not be used for quantitative portfolio claims. Run the documented 500,000-step multi-seed training and 30+ held-out evaluation episodes before adding improvement percentages to the README or résumé.
+| Evaluation | Native / fixed | Shared DQN | Interpretation |
+|---|---:|---:|---|
+| Grid mean vehicle wait | 15.78 s | 9.35 s | 40.7% lower than fixed |
+| Grid heuristic comparison | 12.15 s | 9.35 s | 23.0% lower than heuristic |
+| SUMO waiting load | 1,191.80 | 1,089.01 | 8.6% lower |
+| SUMO mean queue | 20.86 | 22.15 | 6.2% higher |
+| SUMO mean arrivals | 230.00 | 232.33 | Slightly higher |
 
-## Recommended continuation
+These are pipeline-validation results from short training, not a converged policy or field-deployment claim. The SUMO waiting metric is aggregate controlled-lane waiting load per simulation step.
 
-1. Train medium-demand DQN models for seeds `0,1,2` (preferably `0..4`).
-2. Plot training variation with `scripts/plot_training.py`.
-3. Evaluate every trained policy on held-out low, medium, heavy, unbalanced, and rush-hour seeds.
-4. Select the model using validation data, not the final generalization test set.
-5. Run reward and hyperparameter experiments and save their configurations.
-6. Replace the README's empty-results explanation with tables generated from `results/summary_results.csv`.
-7. Add percentage-improvement claims only when supported by the saved episode-level data.
-
-## Environment note
-
-The machine's ordinary `python.exe` currently resolves to a disabled Windows Store shim. Development verification used the Codex bundled Python runtime. A normal Python 3.11+ installation or activated virtual environment is recommended for future terminal work.
-
-The frontend was initially published from its own temporary Sites Git checkout. That checkout metadata is preserved locally at `frontend/.sites-source-git/` and ignored by the unified project repository. Rename it back to `frontend/.git/` only if a future Sites workflow specifically needs the original checkout; ordinary frontend edits remain tracked by the main project repository.
-
-## Useful commands
+## Main commands
 
 ```powershell
-pytest
-python scripts/train_dqn.py --scenario medium --timesteps 500000 --seeds 0,1,2
-python scripts/compare_agents.py --model models/medium_seed_0/best_model.zip --episodes 30
-python scripts/visualize_agent.py --model models/medium_seed_0/best_model.zip --scenario heavy
+pytest -q
+python scripts/train_multi_agent_dqn.py --timesteps 30000 --seed 0
+python scripts/evaluate_multi_agent.py --model-glob "models/grid_shared_dqn_seed_*.pt"
+python scripts/run_sumo_scenario.py --steps 900 --seed 42
+python scripts/run_sumo_policy.py --seeds 42,43,44 --steps 900
 python -m http.server 4173 --directory frontend/dist
 ```
+
+## Recommended next research stage
+
+Train at least 300,000–500,000 steps per seed, add more held-out seeds and demand regimes, tune only on a validation set, then test the frozen policy against detector-calibrated traffic. Before any real-world use, obtain traffic-engineering safety review and use a staged simulation/hardware-in-the-loop deployment process.

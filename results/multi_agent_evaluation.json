@@ -1,0 +1,188 @@
+{
+  "status": "measured",
+  "environment": "TrafficGridEnv protected multimodal cycle",
+  "episode_length": 1200,
+  "evaluation_seeds": [
+    10000,
+    10001,
+    10002,
+    10003,
+    10004,
+    10005,
+    10006,
+    10007,
+    10008,
+    10009
+  ],
+  "models": [
+    "models\\grid_shared_dqn_seed_0.pt",
+    "models\\grid_shared_dqn_seed_1.pt",
+    "models\\grid_shared_dqn_seed_2.pt"
+  ],
+  "controllers": {
+    "fixed_time": {
+      "runs": 10,
+      "metrics": {
+        "reward": {
+          "mean": 516.6555000000002,
+          "std": 27.654582446274325
+        },
+        "vehicle_average_wait": {
+          "mean": 15.775588721565715,
+          "std": 0.41177144547151934
+        },
+        "pedestrian_average_wait": {
+          "mean": 12.426848577618921,
+          "std": 0.6586145664167854
+        },
+        "bicycle_average_wait": {
+          "mean": 2.846213564934234,
+          "std": 0.2103969146538053
+        },
+        "throughput": {
+          "mean": 1517.3,
+          "std": 34.146904854043676
+        },
+        "completion_ratio": {
+          "mean": 0.9808000556611158,
+          "std": 0.003128169714108959
+        },
+        "pedestrian_completion_ratio": {
+          "mean": 1.0,
+          "std": 0.0
+        },
+        "bicycle_completion_ratio": {
+          "mean": 0.9946283304023888,
+          "std": 0.005307357571087393
+        },
+        "conflicts": {
+          "mean": 0.0,
+          "std": 0.0
+        }
+      }
+    },
+    "queue_heuristic": {
+      "runs": 10,
+      "metrics": {
+        "reward": {
+          "mean": 771.492,
+          "std": 52.61530666598405
+        },
+        "vehicle_average_wait": {
+          "mean": 12.149688777190834,
+          "std": 0.9524496123456765
+        },
+        "pedestrian_average_wait": {
+          "mean": 12.784814486097703,
+          "std": 0.7648350700077039
+        },
+        "bicycle_average_wait": {
+          "mean": 2.9174652473901235,
+          "std": 0.19457582582991667
+        },
+        "throughput": {
+          "mean": 1512.7,
+          "std": 34.39977390106575
+        },
+        "completion_ratio": {
+          "mean": 0.9884257686149678,
+          "std": 0.002851044227300587
+        },
+        "pedestrian_completion_ratio": {
+          "mean": 0.9965825688073394,
+          "std": 0.005912339844983218
+        },
+        "bicycle_completion_ratio": {
+          "mean": 0.9937347009625487,
+          "std": 0.007080701397819731
+        },
+        "conflicts": {
+          "mean": 0.0,
+          "std": 0.0
+        }
+      }
+    },
+    "random": {
+      "runs": 10,
+      "metrics": {
+        "reward": {
+          "mean": 711.3315000000001,
+          "std": 34.47174165167754
+        },
+        "vehicle_average_wait": {
+          "mean": 13.017659520904427,
+          "std": 0.38181243344141713
+        },
+        "pedestrian_average_wait": {
+          "mean": 12.739176742939012,
+          "std": 0.9019894031545435
+        },
+        "bicycle_average_wait": {
+          "mean": 2.8865295606614803,
+          "std": 0.23954849806524584
+        },
+        "throughput": {
+          "mean": 1513.4,
+          "std": 42.65416483507534
+        },
+        "completion_ratio": {
+          "mean": 0.9862450371982799,
+          "std": 0.003028417255961323
+        },
+        "pedestrian_completion_ratio": {
+          "mean": 0.9981116950209316,
+          "std": 0.003982888863630526
+        },
+        "bicycle_completion_ratio": {
+          "mean": 0.9949783914915493,
+          "std": 0.005898016848273528
+        },
+        "conflicts": {
+          "mean": 0.0,
+          "std": 0.0
+        }
+      }
+    },
+    "shared_dqn": {
+      "runs": 30,
+      "metrics": {
+        "reward": {
+          "mean": 968.075833333333,
+          "std": 95.28003832698604
+        },
+        "vehicle_average_wait": {
+          "mean": 9.352671129011696,
+          "std": 1.3496450285711872
+        },
+        "pedestrian_average_wait": {
+          "mean": 12.239712263365004,
+          "std": 0.9013365830713557
+        },
+        "bicycle_average_wait": {
+          "mean": 2.880858718092215,
+          "std": 0.19212707980803298
+        },
+        "throughput": {
+          "mean": 1517.4666666666667,
+          "std": 28.2119237854876
+        },
+        "completion_ratio": {
+          "mean": 0.9873169472144846,
+          "std": 0.0027155568233370067
+        },
+        "pedestrian_completion_ratio": {
+          "mean": 0.9982927000617811,
+          "std": 0.0034827693784454106
+        },
+        "bicycle_completion_ratio": {
+          "mean": 0.994660262232057,
+          "std": 0.0049554569066468275
+        },
+        "conflicts": {
+          "mean": 0.0,
+          "std": 0.0
+        }
+      }
+    }
+  }
+}

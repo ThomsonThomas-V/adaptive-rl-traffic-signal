@@ -39,7 +39,7 @@ Waiting time is a queue integral: every queued vehicle adds one vehicle-second p
 
 ### Cooperative 2×2 network
 
-`TrafficGridEnv` adds four connected intersections (agents A–D), straight-through vehicle transfer between neighbors, configurable left/right turn ratios, pedestrian demand, bicycle demand, independent yellow/minimum-green state, and a 40-value centralized observation. `agent_observations()` exposes four local 10-value views for decentralized or multi-agent experiments. Its action space is `MultiDiscrete([3, 3, 3, 3])`.
+`TrafficGridEnv` adds four connected intersections (agents A–D), straight-through vehicle transfer between neighbors, configurable left/right turn ratios, pedestrian demand, bicycle demand, and independent minimum-green state. Its 44-value centralized observation and four local 11-value observations include the protected-mode state. The action space is `MultiDiscrete([3, 3, 3, 3])`.
 
 ```python
 from traffic_rl.envs import TrafficGridEnv, cooperative_actions
@@ -55,12 +55,13 @@ The browser dashboard can switch between the detailed single junction, the coope
 `scripts/train_multi_agent_dqn.py` implements cooperative parameter-sharing DQN: agents A–D use the same neural policy, contribute local transitions to one replay buffer, and learn from a shared network reward. This exploits the intersections' common observation/action structure while still producing four simultaneous decisions.
 
 ```powershell
-python scripts/train_multi_agent_dqn.py --timesteps 300000 --seed 42
+python scripts/train_multi_agent_dqn.py --timesteps 30000 --seed 0
+python scripts/evaluate_multi_agent.py --model-glob "models/grid_shared_dqn_seed_*.pt"
 ```
 
 ### Verified SUMO integration
 
-`traffic_rl.envs.sumo_adapter.SumoAdapter` connects policies to a locally installed SUMO/TraCI runtime. The committed `networks/lemgo/lemgo.sumocfg` uses a real central-Lemgo OpenStreetMap extract with passenger cars, bicycles, pedestrians, turning routes, 9 signal controllers, and 48 controlled lanes. The adapter resolves both normal SUMO installations and the official `eclipse-sumo` Python wheel.
+`traffic_rl.envs.sumo_adapter.SumoAdapter` connects policies to a locally installed SUMO/TraCI runtime. The committed `networks/lemgo/lemgo.sumocfg` uses a real central-Lemgo OpenStreetMap extract with passenger cars, bicycles, protected pedestrian routes, turning routes, 9 signal controllers, and 48 controlled lanes. Pedestrian routes are limited to explicit pedestrian lanes in `pedestrians_safe.rou.xml`. The adapter resolves both normal SUMO installations and the official `eclipse-sumo` Python wheel.
 
 ```python
 from pathlib import Path
@@ -80,7 +81,15 @@ python -m pip install eclipse-sumo
 python scripts/run_sumo_scenario.py --steps 900
 ```
 
-The checked run on SUMO 1.27.1 completed 900 TraCI steps with 427 departures and 230 arrivals. Its machine-readable output is saved in `results/sumo_lemgo_verification.json`.
+The checked run on SUMO 1.27.1 completed 900 TraCI steps with 426 departures, 232 arrivals, and zero collisions. Its machine-readable output is saved in `results/sumo_lemgo_verification.json`.
+
+Run the shared policy against SUMO's native program on matched seeds:
+
+```powershell
+python scripts/run_sumo_policy.py --seeds 42,43,44 --steps 900
+```
+
+The policy can request an earlier transition only after a 20-second minimum green. SUMO still performs the yellow/all-red stages encoded in the native program, so the adapter never jumps directly from one conflicting green to another.
 
 ## Reward function
 
@@ -107,15 +116,25 @@ The DQN uses an MLP policy, replay buffer, target network, epsilon-greedy explor
 
 ## Evaluation and results
 
-`compare_agents.py` uses the same held-out seed set for every controller and every named scenario, writes every episode to `results/raw_results.csv`, writes mean and sample standard deviation to `results/summary_results.csv`, and creates grouped error-bar plots. Metrics are average waiting time, maximum and average queue, throughput, completion ratio, signal switches, total delay, and episode reward.
+`compare_agents.py` evaluates the original single-junction policies. `evaluate_multi_agent.py` performs matched-seed evaluation of the cooperative grid. Three independently initialized shared DQN models were trained for 30,000 steps and evaluated on ten held-out seeds (10000–10009), 1,200 seconds each:
 
-No benchmark numbers are committed in this initial source tree because long DQN training has not been run as part of repository creation. This is deliberate: fabricated results are worse than an empty table. After training, generate the actual tables and figures with:
+| Grid controller | Mean vehicle wait | Mean throughput | Completion ratio | Conflicts |
+|---|---:|---:|---:|---:|
+| Shared DQN | **9.35 s** | 1,517.47 | 98.73% | 0 |
+| Queue heuristic | 12.15 s | 1,512.70 | 98.84% | 0 |
+| Fixed time | 15.78 s | 1,517.30 | 98.08% | 0 |
+| Random | 13.02 s | 1,513.40 | 98.62% | 0 |
 
-```powershell
-python scripts/compare_agents.py --model models/medium_seed_0/best_model.zip --episodes 30
-```
+On this preliminary benchmark, DQN reduced mean vehicle wait by 40.7% versus fixed time and 23.0% versus the queue heuristic. The complete per-policy aggregates are committed in `results/multi_agent_evaluation.json`.
 
-Use `scripts/plot_training.py` to plot rolling training reward, rolling waiting time, and deterministic evaluation reward. For a defensible portfolio claim, train at least three seeds, report variation between them, and distinguish the medium training distribution from low, heavy, unbalanced, and rush-hour generalization tests. Neural initialization, exploration, minibatch sampling, hardware, and PyTorch kernels all contribute to seed variation.
+The Lemgo SUMO comparison covers three seeds and 900 seconds per seed:
+
+| SUMO controller | Mean controlled-lane waiting load | Mean queue | Mean arrivals | Collisions |
+|---|---:|---:|---:|---:|
+| Native signal program | 1,191.80 | **20.86** | 230.00 | 0 |
+| Shared DQN adapter | **1,089.01** | 22.15 | **232.33** | 0 |
+
+The DQN adapter lowered aggregate waiting load by 8.6% and slightly increased arrivals, but mean queue rose by 6.2%. This mixed result is reported deliberately: the 30,000-step models validate the complete pipeline, but they are not a claim of convergence or field readiness. Full run data is in `results/sumo_policy_evaluation.json`.
 
 ## Installation
 
@@ -188,6 +207,8 @@ The browser visualization uses a deterministic 30-second conflict-free display c
 
 Waiting pedestrians are placed on the curb and waiting bicycles and vehicles are placed at stop lines; an inactive animation is reset to that safe waiting position rather than frozen inside the conflict zone. Pedestrians move only during the protected crossing phase, and all motorized and bicycle streams remain stopped until the final clearance interval has completed. The crossing animation scales with the selected simulation speed.
 
+The Python grid environment uses the same 30-second protection principle while allowing each agent to choose its vehicle phase during seconds 0–22: second 23 is pre-pedestrian clearance, seconds 24–27 serve pedestrians only, and seconds 28–29 are post-pedestrian clearance. Invalid actions during protected intervals are ignored by the environment.
+
 The browser simulation mirrors the Python environment's queue, signal-safety, and demand concepts for demonstration. It is not a replacement for Stable-Baselines3 evaluation: benchmark results and trained-policy claims must continue to come from the Python pipeline and saved CSV outputs.
 
 Run the frontend locally from `frontend/dist` with any static file server, for example:
@@ -226,11 +247,11 @@ Sanity checks represented in the tests include zero demand, single-axis arrivals
 
 ## Limitations
 
-The original `TrafficLightEnv` remains one isolated intersection with straight-through vehicles, one lane per approach, aggregate queues, simplified saturation flow, no turn conflicts, no pedestrians, no emergency priority, and no spillback. `TrafficGridEnv` adds four neighboring intersections, turning proportions, bicycles, and pedestrian demand, but it is still a queue-level abstraction rather than a calibrated microscopic model. The Lemgo SUMO scenario improves geometric and road-user realism, but one verification run is not field calibration. Results do not transfer directly to a real junction without detector data, calibration, safety review, and controlled deployment testing.
+The original `TrafficLightEnv` remains one isolated intersection with straight-through vehicles, one lane per approach, aggregate queues, simplified saturation flow, no turn conflicts, no pedestrians, no emergency priority, and no spillback. `TrafficGridEnv` adds four neighboring intersections, turning proportions, bicycles, protected pedestrian service, and clearance intervals, but it is still a queue-level abstraction rather than a calibrated microscopic model. The Lemgo SUMO scenario improves geometric and road-user realism; three short evaluation seeds are still not field calibration. The SUMO metric named waiting load is a per-step aggregate over controlled lanes, not a per-person travel-time average. Results do not transfer directly to a real junction without detector data, calibration, safety review, and controlled deployment testing.
 
 ## Future work
 
-Promising extensions include PPO and Double DQN, prioritized replay, domain randomization, emergency priority, traffic forecasting, real detector calibration, graph neural networks, and transferring the trained multi-agent policy from the lightweight grid into the verified SUMO network. SUMO remains optional for the core unit-test suite.
+Promising extensions include longer training, PPO and Double DQN, prioritized replay, domain randomization, emergency priority, traffic forecasting, real detector calibration, and graph neural networks. SUMO remains optional for the core unit-test suite.
 
 ## What I learned
 

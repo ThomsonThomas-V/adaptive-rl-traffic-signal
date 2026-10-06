@@ -101,6 +101,31 @@ class SumoAdapter:
     def set_phase(self, signal_id: str, phase_index: int) -> None:
         self._require_started().trafficlight.setPhase(signal_id, phase_index)
 
+    def signal_ids(self) -> list[str]:
+        return list(self._require_started().trafficlight.getIDList())
+
+    def controlled_lanes(self, signal_id: str) -> list[str]:
+        return sorted(set(self._require_started().trafficlight.getControlledLanes(signal_id)))
+
+    def request_next_safe_phase(self, signal_id: str, transition_seconds: float = 1.0) -> bool:
+        """Ask SUMO's native program to advance, preserving its yellow/all-red phases.
+
+        Direct green-to-green phase jumps are deliberately avoided. The request
+        only shortens the current green; SUMO then follows the transition phases
+        already encoded in the signal program.
+        """
+        traci = self._require_started()
+        state = str(traci.trafficlight.getRedYellowGreenState(signal_id))
+        if "y" in state.lower() or not any(value in state for value in "Gg"):
+            return False
+        traci.trafficlight.setPhaseDuration(signal_id, float(transition_seconds))
+        return True
+
+    def collision_count(self) -> int:
+        simulation = self._require_started().simulation
+        getter = getattr(simulation, "getCollidingVehiclesNumber", None)
+        return int(getter()) if getter is not None else 0
+
     def close(self) -> None:
         if self.traci is not None:
             self.traci.close()
