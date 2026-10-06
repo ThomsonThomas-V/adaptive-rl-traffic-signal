@@ -37,6 +37,51 @@ Traffic generation has its own seeded NumPy generator. Therefore two controllers
 
 Waiting time is a queue integral: every queued vehicle adds one vehicle-second per step. No per-vehicle objects are required. The reported average is total vehicle-seconds divided by total arrivals, so delay accumulated by vehicles still queued at the horizon is retained. Overflow at the configurable 100-vehicle approach limit is tracked separately.
 
+### Cooperative 2×2 network
+
+`TrafficGridEnv` adds four connected intersections (agents A–D), straight-through vehicle transfer between neighbors, configurable left/right turn ratios, pedestrian demand, bicycle demand, independent yellow/minimum-green state, and a 40-value centralized observation. `agent_observations()` exposes four local 10-value views for decentralized or multi-agent experiments. Its action space is `MultiDiscrete([3, 3, 3, 3])`.
+
+```python
+from traffic_rl.envs import TrafficGridEnv, cooperative_actions
+
+env = TrafficGridEnv()
+observation, info = env.reset(seed=42)
+action = cooperative_actions(env.agent_observations())
+observation, reward, terminated, truncated, info = env.step(action)
+```
+
+The browser dashboard can switch between the detailed single junction, the cooperative 2×2 grid, and a verified SUMO profile for central Lemgo, Germany.
+
+`scripts/train_multi_agent_dqn.py` implements cooperative parameter-sharing DQN: agents A–D use the same neural policy, contribute local transitions to one replay buffer, and learn from a shared network reward. This exploits the intersections' common observation/action structure while still producing four simultaneous decisions.
+
+```powershell
+python scripts/train_multi_agent_dqn.py --timesteps 300000 --seed 42
+```
+
+### Verified SUMO integration
+
+`traffic_rl.envs.sumo_adapter.SumoAdapter` connects policies to a locally installed SUMO/TraCI runtime. The committed `networks/lemgo/lemgo.sumocfg` uses a real central-Lemgo OpenStreetMap extract with passenger cars, bicycles, pedestrians, turning routes, 9 signal controllers, and 48 controlled lanes. The adapter resolves both normal SUMO installations and the official `eclipse-sumo` Python wheel.
+
+```python
+from pathlib import Path
+from traffic_rl.envs.sumo_adapter import SumoAdapter, SumoConfig
+
+sumo = SumoAdapter(SumoConfig(Path("networks/lemgo/lemgo.sumocfg")))
+sumo.start()
+sumo.step()
+metrics = sumo.lane_metrics(["north_0", "south_0"])
+sumo.close()
+```
+
+Run the reproducible native verification:
+
+```powershell
+python -m pip install eclipse-sumo
+python scripts/run_sumo_scenario.py --steps 900
+```
+
+The checked run on SUMO 1.27.1 completed 900 TraCI steps with 427 departures and 230 arrivals. Its machine-readable output is saved in `results/sumo_lemgo_verification.json`.
+
 ## Reward function
 
 The default reward is:
@@ -128,6 +173,21 @@ python scripts/plot_training.py models/medium_seed_0 models/medium_seed_1 models
 
 The `frontend/` directory contains a responsive static control-room interface for exploring the simulator. It provides animated queues and signal phases, traffic-profile selection, DQN-demo and baseline controller modes, simulation speed controls, operational metrics, queue-pressure charts, and an event stream.
 
+### Multimodal safety cycle
+
+The browser visualization uses a deterministic 30-second conflict-free display cycle around the controller output:
+
+| Cycle interval | Permitted movement |
+|---|---|
+| Seconds 0–10 | East–west vehicles and bicycles |
+| Second 11 | All-red clearance |
+| Seconds 12–22 | North–south vehicles and bicycles |
+| Second 23 | All-red clearance |
+| Seconds 24–27 | Protected pedestrian crossing only |
+| Seconds 28–29 | All-red clearance before vehicles restart |
+
+Waiting pedestrians are placed on the curb and waiting bicycles and vehicles are placed at stop lines; an inactive animation is reset to that safe waiting position rather than frozen inside the conflict zone. Pedestrians move only during the protected crossing phase, and all motorized and bicycle streams remain stopped until the final clearance interval has completed. The crossing animation scales with the selected simulation speed.
+
 The browser simulation mirrors the Python environment's queue, signal-safety, and demand concepts for demonstration. It is not a replacement for Stable-Baselines3 evaluation: benchmark results and trained-policy claims must continue to come from the Python pipeline and saved CSV outputs.
 
 Run the frontend locally from `frontend/dist` with any static file server, for example:
@@ -166,11 +226,11 @@ Sanity checks represented in the tests include zero demand, single-axis arrivals
 
 ## Limitations
 
-This is one isolated intersection with straight-through vehicles, one lane per approach, aggregate queues, simplified saturation flow, no turn conflicts, no pedestrians, no emergency priority, no spillback network, and no neighboring-signal coordination. Poisson arrivals and queue-count waiting time are useful abstractions, not a calibrated microscopic traffic model. Results do not transfer directly to a real junction.
+The original `TrafficLightEnv` remains one isolated intersection with straight-through vehicles, one lane per approach, aggregate queues, simplified saturation flow, no turn conflicts, no pedestrians, no emergency priority, and no spillback. `TrafficGridEnv` adds four neighboring intersections, turning proportions, bicycles, and pedestrian demand, but it is still a queue-level abstraction rather than a calibrated microscopic model. The Lemgo SUMO scenario improves geometric and road-user realism, but one verification run is not field calibration. Results do not transfer directly to a real junction without detector data, calibration, safety review, and controlled deployment testing.
 
 ## Future work
 
-Promising extensions include PPO and Double DQN, prioritized replay, domain randomization, turning movements and pedestrian phases, emergency priority, traffic forecasting, real detector data, coordinated intersections, multi-agent RL, graph neural networks, and SUMO/TraCI validation. SUMO is intentionally not required for version 1.
+Promising extensions include PPO and Double DQN, prioritized replay, domain randomization, emergency priority, traffic forecasting, real detector calibration, graph neural networks, and transferring the trained multi-agent policy from the lightweight grid into the verified SUMO network. SUMO remains optional for the core unit-test suite.
 
 ## What I learned
 

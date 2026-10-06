@@ -10,6 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23090d12'/%3E%3Cpath d='M15 3h2v26h-2zM3 15h26v2H3z' fill='%23313a44'/%3E%3Ccircle cx='16' cy='8' r='3' fill='%2326e6a4'/%3E%3Ccircle cx='24' cy='16' r='3' fill='%23ffb84d'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="network.css">
 </head>
 <body>
   <header class="topbar">
@@ -27,7 +28,7 @@
         <p class="eyebrow">ADAPTIVE TRAFFIC SIGNAL CONTROL</p>
         <h1>Intersection <span>control room</span></h1>
       </div>
-      <p class="intro-copy">Test signal strategies against stochastic demand. The browser simulation mirrors the Python environment’s queue, phase, and safety logic.</p>
+      <p class="intro-copy">Compare a detailed junction with a cooperative four-signal district. Turning traffic, bicycles and pedestrians now share the same safety-constrained simulation.</p>
     </section>
 
     <section class="control-strip" aria-label="Simulation controls">
@@ -41,9 +42,16 @@
           <button data-scenario="rush">Rush hour</button>
         </div>
       </fieldset>
+      <label class="select-wrap">NETWORK
+        <select id="topologySelect">
+          <option value="single">Single junction</option>
+          <option value="grid" selected>2×2 agent grid</option>
+          <option value="german">Verified SUMO · Lemgo</option>
+        </select>
+      </label>
       <label class="select-wrap">CONTROLLER
         <select id="controllerSelect">
-          <option value="dqn">DQN · demo policy</option>
+          <option value="dqn">Cooperative RL · demo</option>
           <option value="heuristic">Queue heuristic</option>
           <option value="fixed">Fixed time</option>
           <option value="random">Random</option>
@@ -72,12 +80,13 @@
     <section class="workspace">
       <article class="panel intersection-panel">
         <div class="panel-head">
-          <div><p class="panel-kicker">LIVE ENVIRONMENT</p><h2>Four-way intersection</h2></div>
+          <div><p class="panel-kicker">LIVE ENVIRONMENT</p><h2 id="environmentTitle">Cooperative 2×2 district</h2></div>
           <div class="phase-badge" id="phaseBadge"><span></span><b>NS GREEN</b><small id="phaseTimer">0s</small></div>
         </div>
         <div class="intersection" id="intersection" aria-label="Animated four-way traffic intersection">
           <div class="road vertical"><span class="lane-line vertical-line"></span></div>
           <div class="road horizontal"><span class="lane-line horizontal-line"></span></div>
+          <div class="crosswalk-layer" aria-hidden="true"><span class="crosswalk crosswalk-west"></span><span class="crosswalk crosswalk-east"></span><span class="crosswalk crosswalk-north"></span><span class="crosswalk crosswalk-south"></span></div>
           <div class="center-box"><div class="core-mark">SL</div></div>
           <div class="signal signal-n"><span></span></div>
           <div class="signal signal-s"><span></span></div>
@@ -92,10 +101,36 @@
           <div class="queue-label label-e"><b>E</b><span id="eastQueue">0</span></div>
           <div class="queue-label label-w"><b>W</b><span id="westQueue">0</span></div>
           <div class="direction-hint hint-n">NORTH</div><div class="direction-hint hint-e">EAST</div>
+          <div class="vru-counter"><span><b class="live-bike-count">0</b> cyclists</span><span><b class="live-ped-count">0</b> pedestrians</span></div>
+          <div class="vru-layer" aria-hidden="true">
+            <span class="road-user bike-rider bike-one">🚲</span><span class="road-user bike-rider bike-two">🚲</span><span class="road-user bike-rider bike-three">🚲</span><span class="road-user bike-rider bike-four">🚲</span>
+            <span class="road-user ped-walker ped-one">🚶</span><span class="road-user ped-walker ped-two">🚶</span><span class="road-user ped-walker ped-three">🚶</span><span class="road-user ped-walker ped-four">🚶</span>
+          </div>
+          <div class="protected-path-note">SAFETY-SEPARATED PATHS</div>
+        </div>
+        <div class="network-grid" id="networkGrid" aria-label="Four connected intersections controlled by cooperating agents">
+          <div class="network-road horizontal-road h-top"></div><div class="network-road horizontal-road h-bottom"></div>
+          <div class="network-road vertical-road v-left"></div><div class="network-road vertical-road v-right"></div>
+          <div class="crosswalk-layer" aria-hidden="true"><span class="crosswalk crosswalk-west"></span><span class="crosswalk crosswalk-east"></span><span class="crosswalk crosswalk-north"></span><span class="crosswalk crosswalk-south"></span></div>
+          <div class="network-link link-h-top"></div><div class="network-link link-h-bottom"></div>
+          <div class="network-link link-v-left"></div><div class="network-link link-v-right"></div>
+          <div class="grid-node" data-node="0"><span class="agent-name">AGENT A</span><i class="node-signal"></i><b class="node-queue">0</b><small>NS</small></div>
+          <div class="grid-node" data-node="1"><span class="agent-name">AGENT B</span><i class="node-signal"></i><b class="node-queue">0</b><small>NS</small></div>
+          <div class="grid-node" data-node="2"><span class="agent-name">AGENT C</span><i class="node-signal"></i><b class="node-queue">0</b><small>NS</small></div>
+          <div class="grid-node" data-node="3"><span class="agent-name">AGENT D</span><i class="node-signal"></i><b class="node-queue">0</b><small>NS</small></div>
+          <div class="flow-packet p1"></div><div class="flow-packet p2"></div><div class="flow-packet p3"></div><div class="flow-packet p4"></div>
+          <div class="vru-counter"><span><b class="live-bike-count">0</b> cyclists</span><span><b class="live-ped-count">0</b> pedestrians</span></div>
+          <div class="vru-layer" aria-hidden="true">
+            <span class="road-user bike-rider bike-one">🚲</span><span class="road-user bike-rider bike-two">🚲</span><span class="road-user bike-rider bike-three">🚲</span><span class="road-user bike-rider bike-four">🚲</span>
+            <span class="road-user ped-walker ped-one">🚶</span><span class="road-user ped-walker ped-two">🚶</span><span class="road-user ped-walker ped-three">🚶</span><span class="road-user ped-walker ped-four">🚶</span>
+          </div>
+          <div class="protected-path-note">SAFETY-SEPARATED PATHS</div>
+          <div class="road-user-legend"><span class="vehicle-dot">●</span> vehicles <span class="bike-dot">◆</span> bicycles <span class="ped-dot">■</span> pedestrians</div>
+          <div class="sumo-note" id="sumoNote"><b>SUMO VERIFIED · LEMGO</b><span>9 signals · 48 controlled lanes · OSM + TraCI</span></div>
         </div>
         <div class="intersection-footer">
           <span>SIM TIME <b id="simTime">00:00</b></span>
-          <span>ARRIVAL WINDOW <b>30 sec</b></span>
+          <span>ROAD USERS <b id="roadUsers">cars · bikes · pedestrians</b></span>
           <span>EPISODE <b>20 min</b></span>
         </div>
       </article>
@@ -110,12 +145,13 @@
           <div class="axis-labels"><span>-120s</span><span>-60s</span><span>NOW</span></div>
         </article>
         <article class="panel policy-panel">
-          <div class="panel-head compact"><div><p class="panel-kicker">POLICY DECISION</p><h2 id="decisionTitle">Hold north–south</h2></div><span class="confidence" id="confidence">84%</span></div>
+          <div class="panel-head compact"><div><p class="panel-kicker">POLICY DECISION</p><h2 id="decisionTitle">Four agents coordinating</h2></div><span class="confidence" id="confidence">84%</span></div>
           <div class="decision-bars">
             <div><span>NS demand</span><i><b id="nsDemandBar"></b></i><em id="nsDemand">0</em></div>
             <div><span>EW demand</span><i><b id="ewDemandBar"></b></i><em id="ewDemand">0</em></div>
           </div>
           <p id="decisionCopy">Minimum green protected. Monitoring opposing queue pressure.</p>
+          <div class="mode-tags"><span>LEFT / RIGHT TURNS</span><span>BIKES</span><span>PEDESTRIANS</span><span>YELLOW SAFETY</span></div>
         </article>
         <article class="panel log-panel">
           <div class="panel-head compact"><div><p class="panel-kicker">EVENT STREAM</p><h2>Controller log</h2></div><span class="live-tag">LIVE</span></div>

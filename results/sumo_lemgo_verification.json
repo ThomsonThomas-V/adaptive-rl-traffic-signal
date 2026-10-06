@@ -1,0 +1,21 @@
+{
+  "scenario": "Central Lemgo, Germany (OpenStreetMap)",
+  "sumo_version": "SUMO 1.27.1",
+  "steps": 900,
+  "seed": 42,
+  "signals": 9,
+  "controlled_lanes": 48,
+  "network_lanes": 4956,
+  "departed": 427,
+  "arrived": 230,
+  "vehicles_remaining": 329,
+  "peak_controlled_lane_queue": 46.0,
+  "mean_controlled_lane_queue": 21.572222222222223,
+  "mean_controlled_lane_waiting_seconds": 1204.3011111111111,
+  "traffic_modes": [
+    "passenger cars",
+    "bicycles",
+    "pedestrians"
+  ],
+  "status": "verified"
+}

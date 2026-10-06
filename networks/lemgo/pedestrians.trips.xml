@@ -1,0 +1,558 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- generated on 2026-10-05 20:57:18.282589 by Eclipse SUMO randomTrips.py v1.27.1
+<configuration>
+    <net-file value="networks\lemgo\lemgo.net.xml"/>
+    <output-trip-file value="networks\lemgo\pedestrians.trips.xml"/>
+    <route-file value="networks\lemgo\pedestrians.rou.xml"/>
+    <persons value="True"/>
+    <prefix value="person_"/>
+    <seed value="44"/>
+    <min-distance value="150.0"/>
+    <end value="1800.0"/>
+    <period value="10.0"/>
+</configuration>
+-->
+
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/routes_file.xsd">
+    <person id="person_0" depart="0.00">
+        <walk from="1434458657#1" to="24756867#0"/>
+    </person>
+    <person id="person_1" depart="10.00">
+        <walk from="5056277#1" to="-295271381"/>
+    </person>
+    <person id="person_2" depart="20.00">
+        <walk from="-366729967#3" to="-1273005305"/>
+    </person>
+    <person id="person_3" depart="30.00">
+        <walk from="-24756860#1" to="-1103135981#0"/>
+    </person>
+    <person id="person_4" depart="40.00">
+        <walk from="-293178508" to="24756840#2"/>
+    </person>
+    <person id="person_5" depart="50.00">
+        <walk from="890803283" to="30088007#0"/>
+    </person>
+    <person id="person_6" depart="60.00">
+        <walk from="1259800962" to="1433225150#2"/>
+    </person>
+    <person id="person_7" depart="70.00">
+        <walk from="297783700#1" to="-729506492"/>
+    </person>
+    <person id="person_8" depart="80.00">
+        <walk from="-24701680" to="460358942#2"/>
+    </person>
+    <person id="person_9" depart="90.00">
+        <walk from="293178518#2" to="-24756850"/>
+    </person>
+    <person id="person_10" depart="100.00">
+        <walk from="-244135612#0" to="-24756817#1"/>
+    </person>
+    <person id="person_11" depart="110.00">
+        <walk from="729506491#1" to="-24756843#5"/>
+    </person>
+    <person id="person_12" depart="120.00">
+        <walk from="293178526#0" to="79584460#0"/>
+    </person>
+    <person id="person_13" depart="130.00">
+        <walk from="-1386555183" to="1260770622#0"/>
+    </person>
+    <person id="person_14" depart="140.00">
+        <walk from="24748958#0" to="582816944#0"/>
+    </person>
+    <person id="person_15" depart="150.00">
+        <walk from="-295689155" to="-422906209#1"/>
+    </person>
+    <person id="person_16" depart="160.00">
+        <walk from="-407511308" to="-202336782#0"/>
+    </person>
+    <person id="person_17" depart="170.00">
+        <walk from="295689155" to="4555960"/>
+    </person>
+    <person id="person_18" depart="180.00">
+        <walk from="240373612#1" to="-1433225150#1"/>
+    </person>
+    <person id="person_19" depart="190.00">
+        <walk from="342897389#1" to="366729964#4"/>
+    </person>
+    <person id="person_20" depart="200.00">
+        <walk from="295274744" to="-729506496"/>
+    </person>
+    <person id="person_21" depart="210.00">
+        <walk from="459899476" to="29390277#1"/>
+    </person>
+    <person id="person_22" depart="220.00">
+        <walk from="28639053" to="24756864#0"/>
+    </person>
+    <person id="person_23" depart="230.00">
+        <walk from="-39546868#0" to="24701666#3"/>
+    </person>
+    <person id="person_24" depart="240.00">
+        <walk from="422906209#1" to="29746506#3"/>
+    </person>
+    <person id="person_25" depart="250.00">
+        <walk from="-890803279#1" to="456922680#0"/>
+    </person>
+    <person id="person_26" depart="260.00">
+        <walk from="460358941" to="-1484680649"/>
+    </person>
+    <person id="person_27" depart="270.00">
+        <walk from="-293178519#2" to="-35871371#2"/>
+    </person>
+    <person id="person_28" depart="280.00">
+        <walk from="295005230#1" to="24756867#2"/>
+    </person>
+    <person id="person_29" depart="290.00">
+        <walk from="904031325" to="1025685204"/>
+    </person>
+    <person id="person_30" depart="300.00">
+        <walk from="-30088007#0" to="-24756850"/>
+    </person>
+    <person id="person_31" depart="310.00">
+        <walk from="-8083851" to="460186326"/>
+    </person>
+    <person id="person_32" depart="320.00">
+        <walk from="293178512#0" to="-240373612#0"/>
+    </person>
+    <person id="person_33" depart="330.00">
+        <walk from="240373602" to="-201199528#0"/>
+    </person>
+    <person id="person_34" depart="340.00">
+        <walk from="293178525#0" to="-24756867#2"/>
+    </person>
+    <person id="person_35" depart="350.00">
+        <walk from="-295274748" to="294869609"/>
+    </person>
+    <person id="person_36" depart="360.00">
+        <walk from="460186324" to="293178522#0"/>
+    </person>
+    <person id="person_37" depart="370.00">
+        <walk from="-5056277#0" to="295005229"/>
+    </person>
+    <person id="person_38" depart="380.00">
+        <walk from="-456922681" to="-1103135980#2"/>
+    </person>
+    <person id="person_39" depart="390.00">
+        <walk from="-456923344#1" to="297782566#1"/>
+    </person>
+    <person id="person_40" depart="400.00">
+        <walk from="293178526#2" to="-297397763#1"/>
+    </person>
+    <person id="person_41" depart="410.00">
+        <walk from="460358942#0" to="459910888"/>
+    </person>
+    <person id="person_42" depart="420.00">
+        <walk from="-460358942#0" to="729506493"/>
+    </person>
+    <person id="person_43" depart="430.00">
+        <walk from="-4426369#3" to="-24318341#1"/>
+    </person>
+    <person id="person_44" depart="440.00">
+        <walk from="24756839#3" to="5056279#2"/>
+    </person>
+    <person id="person_45" depart="450.00">
+        <walk from="28822180" to="24756874#0"/>
+    </person>
+    <person id="person_46" depart="460.00">
+        <walk from="24756812#1" to="-479772916#4"/>
+    </person>
+    <person id="person_47" depart="470.00">
+        <walk from="-5056280#3" to="1392193354"/>
+    </person>
+    <person id="person_48" depart="480.00">
+        <walk from="24756874#1" to="6268492#10"/>
+    </person>
+    <person id="person_49" depart="490.00">
+        <walk from="-24701679" to="-422854206"/>
+    </person>
+    <person id="person_50" depart="500.00">
+        <walk from="6268492#11" to="295556888#2"/>
+    </person>
+    <person id="person_51" depart="510.00">
+        <walk from="-24701681#0" to="24318341#1"/>
+    </person>
+    <person id="person_52" depart="520.00">
+        <walk from="-24756793#4" to="580663804"/>
+    </person>
+    <person id="person_53" depart="530.00">
+        <walk from="407511308" to="-460358941"/>
+    </person>
+    <person id="person_54" depart="540.00">
+        <walk from="24756855" to="458878834#1"/>
+    </person>
+    <person id="person_55" depart="550.00">
+        <walk from="-405683164#0" to="30922450#1"/>
+    </person>
+    <person id="person_56" depart="560.00">
+        <walk from="25143339#0" to="-24701679"/>
+    </person>
+    <person id="person_57" depart="570.00">
+        <walk from="-456922680#1" to="162959559"/>
+    </person>
+    <person id="person_58" depart="580.00">
+        <walk from="-252668577#1" to="6268492#11"/>
+    </person>
+    <person id="person_59" depart="590.00">
+        <walk from="-422792154" to="-39323393#4"/>
+    </person>
+    <person id="person_60" depart="600.00">
+        <walk from="28680442#4" to="24756845"/>
+    </person>
+    <person id="person_61" depart="610.00">
+        <walk from="24756822" to="580663814#2"/>
+    </person>
+    <person id="person_62" depart="620.00">
+        <walk from="-24748955#1" to="580663816#1"/>
+    </person>
+    <person id="person_63" depart="630.00">
+        <walk from="623979814" to="29746506#2"/>
+    </person>
+    <person id="person_64" depart="640.00">
+        <walk from="4426369#2" to="1260770619#1"/>
+    </person>
+    <person id="person_65" depart="650.00">
+        <walk from="729506495" to="37805850#1"/>
+    </person>
+    <person id="person_66" depart="660.00">
+        <walk from="29746510#1" to="244135604#1"/>
+    </person>
+    <person id="person_67" depart="670.00">
+        <walk from="-35871369" to="297783700#1"/>
+    </person>
+    <person id="person_68" depart="680.00">
+        <walk from="366729964#2" to="-1103135980#0"/>
+    </person>
+    <person id="person_69" depart="690.00">
+        <walk from="-583549564" to="24756858"/>
+    </person>
+    <person id="person_70" depart="700.00">
+        <walk from="-344285791" to="-24756875#1"/>
+    </person>
+    <person id="person_71" depart="710.00">
+        <walk from="-295688223#1" to="-1182402516"/>
+    </person>
+    <person id="person_72" depart="720.00">
+        <walk from="-24756865" to="1273005304"/>
+    </person>
+    <person id="person_73" depart="730.00">
+        <walk from="24756827#4" to="29390277#7"/>
+    </person>
+    <person id="person_74" depart="740.00">
+        <walk from="-582816947" to="-24756874#3"/>
+    </person>
+    <person id="person_75" depart="750.00">
+        <walk from="583515500#0" to="29390277#11"/>
+    </person>
+    <person id="person_76" depart="760.00">
+        <walk from="29746502#1" to="297782568"/>
+    </person>
+    <person id="person_77" depart="770.00">
+        <walk from="-657424634" to="28680423#1"/>
+    </person>
+    <person id="person_78" depart="780.00">
+        <walk from="-6268492#8" to="295274744"/>
+    </person>
+    <person id="person_79" depart="790.00">
+        <walk from="4555961#1" to="-1259800962"/>
+    </person>
+    <person id="person_80" depart="800.00">
+        <walk from="42985934#1" to="-24756861#0"/>
+    </person>
+    <person id="person_81" depart="810.00">
+        <walk from="-1259800962" to="-247033172"/>
+    </person>
+    <person id="person_82" depart="820.00">
+        <walk from="25210029#0" to="490903364#1"/>
+    </person>
+    <person id="person_83" depart="830.00">
+        <walk from="583515500#7" to="-293178519#2"/>
+    </person>
+    <person id="person_84" depart="840.00">
+        <walk from="23998767#1" to="6268478#2"/>
+    </person>
+    <person id="person_85" depart="850.00">
+        <walk from="578215599#1" to="458878835"/>
+    </person>
+    <person id="person_86" depart="860.00">
+        <walk from="-414795163#0" to="-4571374"/>
+    </person>
+    <person id="person_87" depart="870.00">
+        <walk from="-26585649#3" to="-4433539#1"/>
+    </person>
+    <person id="person_88" depart="880.00">
+        <walk from="1433225150#1" to="442021643#0"/>
+    </person>
+    <person id="person_89" depart="890.00">
+        <walk from="295556892#2" to="-295000487"/>
+    </person>
+    <person id="person_90" depart="900.00">
+        <walk from="-295274747" to="24502784"/>
+    </person>
+    <person id="person_91" depart="910.00">
+        <walk from="578215600#1" to="24745530"/>
+    </person>
+    <person id="person_92" depart="920.00">
+        <walk from="422856033#1" to="297782567#1"/>
+    </person>
+    <person id="person_93" depart="930.00">
+        <walk from="573261875" to="24756822"/>
+    </person>
+    <person id="person_94" depart="940.00">
+        <walk from="1246157386#1" to="24701674#2"/>
+    </person>
+    <person id="person_95" depart="950.00">
+        <walk from="4426369#1" to="-460358941"/>
+    </person>
+    <person id="person_96" depart="960.00">
+        <walk from="-29746493" to="460186325#1"/>
+    </person>
+    <person id="person_97" depart="970.00">
+        <walk from="24756793#2" to="294867072"/>
+    </person>
+    <person id="person_98" depart="980.00">
+        <walk from="-1322141623#0" to="-456923344#0"/>
+    </person>
+    <person id="person_99" depart="990.00">
+        <walk from="6268492#10" to="240373614"/>
+    </person>
+    <person id="person_100" depart="1000.00">
+        <walk from="-1092207177" to="4426369#2"/>
+    </person>
+    <person id="person_101" depart="1010.00">
+        <walk from="-578215598#0" to="-295002920"/>
+    </person>
+    <person id="person_102" depart="1020.00">
+        <walk from="29390277#7" to="295556896"/>
+    </person>
+    <person id="person_103" depart="1030.00">
+        <walk from="-729506491#0" to="34094521#1"/>
+    </person>
+    <person id="person_104" depart="1040.00">
+        <walk from="515306090" to="-8083849#9"/>
+    </person>
+    <person id="person_105" depart="1050.00">
+        <walk from="24756823" to="-1103135980#0"/>
+    </person>
+    <person id="person_106" depart="1060.00">
+        <walk from="28639054#1" to="-499231754"/>
+    </person>
+    <person id="person_107" depart="1070.00">
+        <walk from="295274742" to="39546875#3"/>
+    </person>
+    <person id="person_108" depart="1080.00">
+        <walk from="-8158564#0" to="295556900#1"/>
+    </person>
+    <person id="person_109" depart="1090.00">
+        <walk from="6268492#10" to="-29390241#3"/>
+    </person>
+    <person id="person_110" depart="1100.00">
+        <walk from="442021643#1" to="24748958#0"/>
+    </person>
+    <person id="person_111" depart="1110.00">
+        <walk from="6268492#11" to="-24701679"/>
+    </person>
+    <person id="person_112" depart="1120.00">
+        <walk from="-422906209#2" to="578215600#1"/>
+    </person>
+    <person id="person_113" depart="1130.00">
+        <walk from="24756850" to="1025685206#1"/>
+    </person>
+    <person id="person_114" depart="1140.00">
+        <walk from="729506495" to="-205686721#2"/>
+    </person>
+    <person id="person_115" depart="1150.00">
+        <walk from="-1260770615#1" to="407511297#0"/>
+    </person>
+    <person id="person_116" depart="1160.00">
+        <walk from="25143158#5" to="460186320#1"/>
+    </person>
+    <person id="person_117" depart="1170.00">
+        <walk from="24756821" to="6268492#2"/>
+    </person>
+    <person id="person_118" depart="1180.00">
+        <walk from="-8083849#0" to="-38432614"/>
+    </person>
+    <person id="person_119" depart="1190.00">
+        <walk from="573261878#3" to="24756855"/>
+    </person>
+    <person id="person_120" depart="1200.00">
+        <walk from="-1273005306" to="-1103135982#0"/>
+    </person>
+    <person id="person_121" depart="1210.00">
+        <walk from="-1259800962" to="35871369"/>
+    </person>
+    <person id="person_122" depart="1220.00">
+        <walk from="29390277#8" to="-24756852"/>
+    </person>
+    <person id="person_123" depart="1230.00">
+        <walk from="29390277#10" to="265432333"/>
+    </person>
+    <person id="person_124" depart="1240.00">
+        <walk from="240373608" to="297783702"/>
+    </person>
+    <person id="person_125" depart="1250.00">
+        <walk from="1273005300#2" to="583515501"/>
+    </person>
+    <person id="person_126" depart="1260.00">
+        <walk from="28639054#0" to="295688223#1"/>
+    </person>
+    <person id="person_127" depart="1270.00">
+        <walk from="583515500#8" to="8083851"/>
+    </person>
+    <person id="person_128" depart="1280.00">
+        <walk from="24756843#5" to="582816955"/>
+    </person>
+    <person id="person_129" depart="1290.00">
+        <walk from="-34094521#0" to="-422856030#2"/>
+    </person>
+    <person id="person_130" depart="1300.00">
+        <walk from="-4571375" to="-39323393#4"/>
+    </person>
+    <person id="person_131" depart="1310.00">
+        <walk from="4555782#0" to="24756858"/>
+    </person>
+    <person id="person_132" depart="1320.00">
+        <walk from="-24756805#0" to="24756839#1"/>
+    </person>
+    <person id="person_133" depart="1330.00">
+        <walk from="30784915#1" to="-1273005300#2"/>
+    </person>
+    <person id="person_134" depart="1340.00">
+        <walk from="30784915#1" to="1386555180#2"/>
+    </person>
+    <person id="person_135" depart="1350.00">
+        <walk from="23981699#2" to="205686721#1"/>
+    </person>
+    <person id="person_136" depart="1360.00">
+        <walk from="-8083847#0" to="-1433225152"/>
+    </person>
+    <person id="person_137" depart="1370.00">
+        <walk from="-729506492" to="29390277#15"/>
+    </person>
+    <person id="person_138" depart="1380.00">
+        <walk from="-293178521#1" to="-1482592863"/>
+    </person>
+    <person id="person_139" depart="1390.00">
+        <walk from="405683164#1" to="342897389#1"/>
+    </person>
+    <person id="person_140" depart="1400.00">
+        <walk from="295556889#0" to="729506495"/>
+    </person>
+    <person id="person_141" depart="1410.00">
+        <walk from="-582816939" to="35871371#1"/>
+    </person>
+    <person id="person_142" depart="1420.00">
+        <walk from="-490075676#0" to="28822178#1"/>
+    </person>
+    <person id="person_143" depart="1430.00">
+        <walk from="580663812#6" to="24701666#3"/>
+    </person>
+    <person id="person_144" depart="1440.00">
+        <walk from="293178515#7" to="890420079#1"/>
+    </person>
+    <person id="person_145" depart="1450.00">
+        <walk from="24756814" to="-39546875#2"/>
+    </person>
+    <person id="person_146" depart="1460.00">
+        <walk from="660768672" to="295875088"/>
+    </person>
+    <person id="person_147" depart="1470.00">
+        <walk from="-729506491#2" to="-4571375"/>
+    </person>
+    <person id="person_148" depart="1480.00">
+        <walk from="-1260770621#2" to="-24756810#0"/>
+    </person>
+    <person id="person_149" depart="1490.00">
+        <walk from="8083849#3" to="25143158#6"/>
+    </person>
+    <person id="person_150" depart="1500.00">
+        <walk from="460358942#1" to="31470606#2"/>
+    </person>
+    <person id="person_151" depart="1510.00">
+        <walk from="515306090" to="24756810#3"/>
+    </person>
+    <person id="person_152" depart="1520.00">
+        <walk from="-26585580#2" to="580663814#1"/>
+    </person>
+    <person id="person_153" depart="1530.00">
+        <walk from="-538575316" to="583515500#4"/>
+    </person>
+    <person id="person_154" depart="1540.00">
+        <walk from="24756875#0" to="1386555180#2"/>
+    </person>
+    <person id="person_155" depart="1550.00">
+        <walk from="-24748955#0" to="-166479599"/>
+    </person>
+    <person id="person_156" depart="1560.00">
+        <walk from="-24756793#4" to="580663812#0"/>
+    </person>
+    <person id="person_157" depart="1570.00">
+        <walk from="-897627385#0" to="-1260770622#0"/>
+    </person>
+    <person id="person_158" depart="1580.00">
+        <walk from="1386555183" to="29390277#16"/>
+    </person>
+    <person id="person_159" depart="1590.00">
+        <walk from="29390277#15" to="582550592"/>
+    </person>
+    <person id="person_160" depart="1600.00">
+        <walk from="-903911646#1" to="660768658"/>
+    </person>
+    <person id="person_161" depart="1610.00">
+        <walk from="-1103148221#1" to="-293178521#0"/>
+    </person>
+    <person id="person_162" depart="1620.00">
+        <walk from="24756817#0" to="295005230#0"/>
+    </person>
+    <person id="person_163" depart="1630.00">
+        <walk from="202336782#1" to="422856028#1"/>
+    </person>
+    <person id="person_164" depart="1640.00">
+        <walk from="24756868" to="-1025685203#0"/>
+    </person>
+    <person id="person_165" depart="1650.00">
+        <walk from="1273005303#1" to="294867072"/>
+    </person>
+    <person id="person_166" depart="1660.00">
+        <walk from="-422906209#1" to="-295680514"/>
+    </person>
+    <person id="person_167" depart="1670.00">
+        <walk from="295000487" to="24701676#1"/>
+    </person>
+    <person id="person_168" depart="1680.00">
+        <walk from="890803279#0" to="646083235"/>
+    </person>
+    <person id="person_169" depart="1690.00">
+        <walk from="-582816944#0" to="-1292202115"/>
+    </person>
+    <person id="person_170" depart="1700.00">
+        <walk from="-295274744" to="240373600"/>
+    </person>
+    <person id="person_171" depart="1710.00">
+        <walk from="209622412" to="240373600"/>
+    </person>
+    <person id="person_172" depart="1720.00">
+        <walk from="-24756805#1" to="-5056280#3"/>
+    </person>
+    <person id="person_173" depart="1730.00">
+        <walk from="-24756860#0" to="29390277#15"/>
+    </person>
+    <person id="person_174" depart="1740.00">
+        <walk from="1259812531" to="422795198#1"/>
+    </person>
+    <person id="person_175" depart="1750.00">
+        <walk from="460186320#1" to="-1260770621#0"/>
+    </person>
+    <person id="person_176" depart="1760.00">
+        <walk from="-6268492#10" to="24756841#1"/>
+    </person>
+    <person id="person_177" depart="1770.00">
+        <walk from="-5056277#0" to="1273005301"/>
+    </person>
+    <person id="person_178" depart="1780.00">
+        <walk from="26411327#5" to="-39546875#1"/>
+    </person>
+    <person id="person_179" depart="1790.00">
+        <walk from="496183818" to="-479772916#5"/>
+    </person>
+</routes>

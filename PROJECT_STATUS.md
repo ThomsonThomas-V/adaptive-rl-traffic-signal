@@ -12,11 +12,14 @@
 - Added the Pygame renderer and agent-visualization script.
 - Added package metadata, requirements, MIT license, `.gitignore`, and portfolio documentation.
 - Added a responsive interactive frontend under `frontend/dist`.
+- Added the cooperative 2×2 `TrafficGridEnv`, parameter-sharing multi-agent DQN trainer, turning movements, bicycle demand, and pedestrian demand.
+- Added a SUMO/TraCI adapter and reproducible central-Lemgo scenario with cars, bicycles, pedestrians, 9 signal controllers, and 48 controlled lanes.
+- Added a protected 30-second browser safety cycle with curb/stop-line waiting positions and all-red clearance intervals so road users are never paused inside a conflict zone.
 - Published the private frontend at <https://signal-lab-traffic-control.thomsonthomasoffice.chatgpt.site>.
 
 ## Verification performed
 
-- `pytest`: **18 passed**.
+- `pytest`: **21 passed**.
 - Stable-Baselines3 `check_env`: passed through the environment test suite.
 - Python source compilation: passed.
 - Pygame RGB rendering: returned a valid `720 × 720 × 3` frame.
@@ -24,6 +27,8 @@
 - Evaluation smoke run: all four controllers across all five scenarios completed.
 - Frontend: desktop and 390 px mobile layouts verified with no horizontal overflow.
 - Frontend WebMCP tools registered for configuring the simulation and reading live metrics.
+- Frontend JavaScript syntax validation: passed after the multimodal safety-cycle update.
+- Native SUMO verification: 900 TraCI steps completed on SUMO 1.27.1; results saved in `results/sumo_lemgo_verification.json`.
 
 ## Important artifact distinction
 
