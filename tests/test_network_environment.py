@@ -97,3 +97,59 @@ def test_bicycles_move_only_during_vehicle_service() -> None:
     env.step(np.zeros(4, dtype=np.int64))
     np.testing.assert_array_equal(env.bicycles, np.ones(4, dtype=np.int64))
     assert env.bicycles_served == 4
+
+
+def test_road_closure_blocks_only_the_configured_movement() -> None:
+    env = TrafficGridEnv(
+        GridConfig(
+            boundary_arrival_rate=0,
+            pedestrian_rate=0,
+            bicycle_rate=0,
+            service_rate=1,
+            incident_node=1,
+            incident_approach=3,
+            incident_start=0,
+            incident_end=10,
+        )
+    )
+    env.reset(seed=6)
+    env.phases[:] = 1
+    env.queues[1, 2:4] = 2
+    env.step(np.zeros(4, dtype=np.int64))
+    assert env.queues[1, 2] == 1
+    assert env.queues[1, 3] == 2
+
+
+def test_sensor_failure_masks_observation_but_not_physical_queue() -> None:
+    env = TrafficGridEnv(
+        GridConfig(
+            boundary_arrival_rate=0,
+            pedestrian_rate=0,
+            bicycle_rate=0,
+            sensor_failure_node=2,
+            sensor_failure_start=0,
+            sensor_failure_end=20,
+        )
+    )
+    env.reset(seed=7)
+    env.queues[2] = 10
+    observation = env.agent_observations()["C"]
+    np.testing.assert_array_equal(observation[:4], np.zeros(4))
+    np.testing.assert_array_equal(env.queues[2], np.full(4, 10))
+
+
+def test_emergency_vehicle_is_tracked_and_served_with_priority() -> None:
+    env = TrafficGridEnv(
+        GridConfig(
+            boundary_arrival_rate=0,
+            pedestrian_rate=0,
+            bicycle_rate=0,
+            service_rate=1,
+        )
+    )
+    env.reset(seed=8)
+    env.queues[2, 0] = 2
+    env.emergencies[2, 0] = 1
+    env.step(np.zeros(4, dtype=np.int64))
+    assert env.emergencies[2, 0] == 0
+    assert env.emergencies_served == 1

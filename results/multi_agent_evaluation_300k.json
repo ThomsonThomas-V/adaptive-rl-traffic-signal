@@ -1,0 +1,2731 @@
+{
+  "status": "measured",
+  "environment": "TrafficGridEnv protected multimodal cycle",
+  "episode_length": 1200,
+  "evaluation_seeds": [
+    10000,
+    10001,
+    10002,
+    10003,
+    10004,
+    10005,
+    10006,
+    10007,
+    10008,
+    10009,
+    10010,
+    10011,
+    10012,
+    10013,
+    10014,
+    10015,
+    10016,
+    10017,
+    10018,
+    10019,
+    10020,
+    10021,
+    10022,
+    10023,
+    10024,
+    10025,
+    10026,
+    10027,
+    10028,
+    10029
+  ],
+  "models": [
+    "models\\grid_shared_dqn_300k_seed_1.pt"
+  ],
+  "statistical_note": "95% normal-approximation confidence intervals; paired comparisons match each model to identical demand seeds.",
+  "scenarios": {
+    "balanced": {
+      "controllers": {
+        "fixed_time": {
+          "runs": 30,
+          "metrics": {
+            "reward": {
+              "mean": 499.963166666667,
+              "std": 25.741036655012923,
+              "ci95_low": 490.751854999382,
+              "ci95_high": 509.17447833395204
+            },
+            "vehicle_average_wait": {
+              "mean": 15.902298068991088,
+              "std": 0.36637609431364787,
+              "ci95_low": 15.771192067418754,
+              "ci95_high": 16.03340407056342
+            },
+            "pedestrian_average_wait": {
+              "mean": 12.707744556117028,
+              "std": 0.7217458472021273,
+              "ci95_low": 12.449471121668816,
+              "ci95_high": 12.96601799056524
+            },
+            "bicycle_average_wait": {
+              "mean": 2.898922162419628,
+              "std": 0.22012714049266444,
+              "ci95_low": 2.82015067684656,
+              "ci95_high": 2.9776936479926963
+            },
+            "throughput": {
+              "mean": 1512.9333333333334,
+              "std": 34.641945208317786,
+              "ci95_low": 1500.536872446717,
+              "ci95_high": 1525.3297942199497
+            },
+            "completion_ratio": {
+              "mean": 0.9808170394035379,
+              "std": 0.0030604864427373033,
+              "ci95_low": 0.9797218583952756,
+              "ci95_high": 0.9819122204118003
+            },
+            "pedestrian_completion_ratio": {
+              "mean": 0.9991447639236782,
+              "std": 0.002610466506908683,
+              "ci95_low": 0.9982106204812671,
+              "ci95_high": 1.0000789073660894
+            },
+            "bicycle_completion_ratio": {
+              "mean": 0.994920166668066,
+              "std": 0.005264177389741547,
+              "ci95_low": 0.9930364049820603,
+              "ci95_high": 0.9968039283540718
+            },
+            "conflicts": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            },
+            "overflows": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            },
+            "max_queue": {
+              "mean": 8.366666666666667,
+              "std": 1.809616711814455,
+              "ci95_low": 7.71910364291392,
+              "ci95_high": 9.014229690419414
+            },
+            "emergency_average_wait": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            },
+            "emergency_completion_ratio": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            }
+          }
+        },
+        "queue_heuristic": {
+          "runs": 30,
+          "metrics": {
+            "reward": {
+              "mean": 768.5433333333334,
+              "std": 49.67474830877578,
+              "ci95_low": 750.7674529444228,
+              "ci95_high": 786.3192137222441
+            },
+            "vehicle_average_wait": {
+              "mean": 11.986088658946525,
+              "std": 0.7639081600024317,
+              "ci95_low": 11.712727634630735,
+              "ci95_high": 12.259449683262314
+            },
+            "pedestrian_average_wait": {
+              "mean": 12.756588406363079,
+              "std": 0.6926894278920213,
+              "ci95_low": 12.508712678028564,
+              "ci95_high": 13.004464134697594
+            },
+            "bicycle_average_wait": {
+              "mean": 2.908830628930291,
+              "std": 0.20149784741646684,
+              "ci95_low": 2.836725550268719,
+              "ci95_high": 2.980935707591863
+            },
+            "throughput": {
+              "mean": 1519.2333333333333,
+              "std": 32.24120658875611,
+              "ci95_low": 1507.6959657285006,
+              "ci95_high": 1530.770700938166
+            },
+            "completion_ratio": {
+              "mean": 0.9880969134021385,
+              "std": 0.0027546893621283037,
+              "ci95_low": 0.9871111604738011,
+              "ci95_high": 0.9890826663304758
+            },
+            "pedestrian_completion_ratio": {
+              "mean": 0.9985983890775122,
+              "std": 0.003870556184786158,
+              "ci95_low": 0.9972133283349465,
+              "ci95_high": 0.9999834498200779
+            },
+            "bicycle_completion_ratio": {
+              "mean": 0.994902230982337,
+              "std": 0.006332435013015343,
+              "ci95_low": 0.9926361982153018,
+              "ci95_high": 0.9971682637493722
+            },
+            "conflicts": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            },
+            "overflows": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            },
+            "max_queue": {
+              "mean": 3.933333333333333,
+              "std": 1.2015315896469558,
+              "ci95_low": 3.503370775932943,
+              "ci95_high": 4.363295890733723
+            },
+            "emergency_average_wait": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            },
+            "emergency_completion_ratio": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            }
+          }
+        },
+        "random": {
+          "runs": 30,
+          "metrics": {
+            "reward": {
+              "mean": 693.2136666666665,
+              "std": 35.045549201725755,
+              "ci95_low": 680.6727779458776,
+              "ci95_high": 705.7545553874555
+            },
+            "vehicle_average_wait": {
+              "mean": 13.14240863155293,
+              "std": 0.4836863536759484,
+              "ci95_low": 12.969323692797982,
+              "ci95_high": 13.31549357030788
+            },
+            "pedestrian_average_wait": {
+              "mean": 12.801419514107703,
+              "std": 0.7648023917350567,
+              "ci95_low": 12.52773849307607,
+              "ci95_high": 13.075100535139336
+            },
+            "bicycle_average_wait": {
+              "mean": 2.792929924732738,
+              "std": 0.222410187906187,
+              "ci95_low": 2.7133414611350863,
+              "ci95_high": 2.8725183883303895
+            },
+            "throughput": {
+              "mean": 1523.8,
+              "std": 37.94133402486273,
+              "ci95_low": 1510.222867988593,
+              "ci95_high": 1537.377132011407
+            },
+            "completion_ratio": {
+              "mean": 0.9864683771607591,
+              "std": 0.003191800966366006,
+              "ci95_low": 0.9853262058537067,
+              "ci95_high": 0.9876105484678115
+            },
+            "pedestrian_completion_ratio": {
+              "mean": 0.9985452364155533,
+              "std": 0.0033289761383745874,
+              "ci95_low": 0.9973539776036222,
+              "ci95_high": 0.9997364952274843
+            },
+            "bicycle_completion_ratio": {
+              "mean": 0.9942142976887213,
+              "std": 0.006685263421854519,
+              "ci95_low": 0.9918220068970989,
+              "ci95_high": 0.9966065884803437
+            },
+            "conflicts": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            },
+            "overflows": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            },
+            "max_queue": {
+              "mean": 4.633333333333334,
+              "std": 1.4259499757471625,
+              "ci95_low": 4.123063687840766,
+              "ci95_high": 5.143602978825902
+            },
+            "emergency_average_wait": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            },
+            "emergency_completion_ratio": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            }
+          }
+        },
+        "shared_dqn": {
+          "runs": 30,
+          "metrics": {
+            "reward": {
+              "mean": 837.6115000000001,
+              "std": 50.28852981837,
+              "ci95_low": 819.6159807186757,
+              "ci95_high": 855.6070192813245
+            },
+            "vehicle_average_wait": {
+              "mean": 10.993922839912953,
+              "std": 0.6219879330256158,
+              "ci95_low": 10.771347316589047,
+              "ci95_high": 11.216498363236859
+            },
+            "pedestrian_average_wait": {
+              "mean": 12.692925870585954,
+              "std": 0.7175121145286152,
+              "ci95_low": 12.436167457917726,
+              "ci95_high": 12.949684283254182
+            },
+            "bicycle_average_wait": {
+              "mean": 2.8562716584402295,
+              "std": 0.21009110965717057,
+              "ci95_low": 2.781091520378421,
+              "ci95_high": 2.931451796502038
+            },
+            "throughput": {
+              "mean": 1520.7333333333333,
+              "std": 54.718674447882364,
+              "ci95_low": 1501.152507156234,
+              "ci95_high": 1540.3141595104328
+            },
+            "completion_ratio": {
+              "mean": 0.9872623742284602,
+              "std": 0.003333069087482298,
+              "ci95_low": 0.9860696507735012,
+              "ci95_high": 0.9884550976834192
+            },
+            "pedestrian_completion_ratio": {
+              "mean": 0.9988920881473525,
+              "std": 0.0028816305304944587,
+              "ci95_low": 0.9978609099053068,
+              "ci95_high": 0.9999232663893982
+            },
+            "bicycle_completion_ratio": {
+              "mean": 0.9936318889477288,
+              "std": 0.004898260362884143,
+              "ci95_low": 0.9918790689881158,
+              "ci95_high": 0.9953847089073418
+            },
+            "conflicts": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            },
+            "overflows": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            },
+            "max_queue": {
+              "mean": 4.333333333333333,
+              "std": 1.093344547181068,
+              "ci95_low": 3.9420850118773227,
+              "ci95_high": 4.724581654789343
+            },
+            "emergency_average_wait": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            },
+            "emergency_completion_ratio": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            }
+          }
+        }
+      },
+      "paired_dqn_comparisons": {
+        "fixed_time": {
+          "vehicle_average_wait": {
+            "mean_difference": -4.9083752290781355,
+            "ci95_low": -5.162930144283817,
+            "ci95_high": -4.653820313872454,
+            "statistically_significant_95": true,
+            "improvement_percent": 30.865823340648426
+          },
+          "overflows": {
+            "mean_difference": 0.0,
+            "ci95_low": 0.0,
+            "ci95_high": 0.0,
+            "statistically_significant_95": false,
+            "improvement_percent": 0.0
+          },
+          "max_queue": {
+            "mean_difference": -4.033333333333333,
+            "ci95_low": -4.758118158054156,
+            "ci95_high": -3.3085485086125104,
+            "statistically_significant_95": true,
+            "improvement_percent": 48.207171314741046
+          }
+        },
+        "queue_heuristic": {
+          "vehicle_average_wait": {
+            "mean_difference": -0.9921658190335727,
+            "ci95_low": -1.3343513864081868,
+            "ci95_high": -0.6499802516589586,
+            "statistically_significant_95": true,
+            "improvement_percent": 8.27764458669351
+          },
+          "overflows": {
+            "mean_difference": 0.0,
+            "ci95_low": 0.0,
+            "ci95_high": 0.0,
+            "statistically_significant_95": false,
+            "improvement_percent": 0.0
+          },
+          "max_queue": {
+            "mean_difference": 0.4,
+            "ci95_low": -0.10256756851147897,
+            "ci95_high": 0.902567568511479,
+            "statistically_significant_95": false,
+            "improvement_percent": -10.169491525423728
+          }
+        }
+      }
+    },
+    "rush_hour": {
+      "controllers": {
+        "fixed_time": {
+          "runs": 30,
+          "metrics": {
+            "reward": {
+              "mean": -18861.64716666666,
+              "std": 2279.9169030091907,
+              "ci95_low": -19677.504952450086,
+              "ci95_high": -18045.78938088323
+            },
+            "vehicle_average_wait": {
+              "mean": 112.31913852422682,
+              "std": 5.988651195967658,
+              "ci95_low": 110.17612721617311,
+              "ci95_high": 114.46214983228052
+            },
+            "pedestrian_average_wait": {
+              "mean": 12.657024467596216,
+              "std": 0.6809642722184263,
+              "ci95_low": 12.413344532333458,
+              "ci95_high": 12.900704402858974
+            },
+            "bicycle_average_wait": {
+              "mean": 2.906217717178478,
+              "std": 0.23600839241457916,
+              "ci95_low": 2.8217631985916274,
+              "ci95_high": 2.990672235765329
+            },
+            "throughput": {
+              "mean": 2561.9666666666667,
+              "std": 1.2172137016162359,
+              "ci95_low": 2561.5310923375696,
+              "ci95_high": 2562.402240995764
+            },
+            "completion_ratio": {
+              "mean": 0.8140848460739771,
+              "std": 0.01773098264147498,
+              "ci95_low": 0.8077398954231244,
+              "ci95_high": 0.8204297967248299
+            },
+            "pedestrian_completion_ratio": {
+              "mean": 0.9978130213283065,
+              "std": 0.0033986405855672024,
+              "ci95_low": 0.996596833414109,
+              "ci95_high": 0.999029209242504
+            },
+            "bicycle_completion_ratio": {
+              "mean": 0.9951625591659796,
+              "std": 0.004803309004587517,
+              "ci95_low": 0.9934437171135592,
+              "ci95_high": 0.9968814012184001
+            },
+            "conflicts": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            },
+            "overflows": {
+              "mean": 117.13333333333334,
+              "std": 39.261926220891304,
+              "ci95_low": 103.08363347370667,
+              "ci95_high": 131.18303319296
+            },
+            "max_queue": {
+              "mean": 70.23333333333333,
+              "std": 4.231925732134114,
+              "ci95_low": 68.71895815901807,
+              "ci95_high": 71.7477085076486
+            },
+            "emergency_average_wait": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            },
+            "emergency_completion_ratio": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            }
+          }
+        },
+        "queue_heuristic": {
+          "runs": 30,
+          "metrics": {
+            "reward": {
+              "mean": -35221.6805,
+              "std": 1148.9291897175817,
+              "ci95_low": -35632.81953033384,
+              "ci95_high": -34810.54146966616
+            },
+            "vehicle_average_wait": {
+              "mean": 158.9315279374641,
+              "std": 2.7082713747406877,
+              "ci95_low": 157.9623854725873,
+              "ci95_high": 159.9006704023409
+            },
+            "pedestrian_average_wait": {
+              "mean": 12.701520731971153,
+              "std": 0.6640175593393176,
+              "ci95_low": 12.463905100029102,
+              "ci95_high": 12.939136363913203
+            },
+            "bicycle_average_wait": {
+              "mean": 2.9262771969676,
+              "std": 0.13906563102003308,
+              "ci95_low": 2.876513200019803,
+              "ci95_high": 2.9760411939153966
+            },
+            "throughput": {
+              "mean": 1886.4,
+              "std": 11.871728224419675,
+              "ci95_low": 1882.1517566145442,
+              "ci95_high": 1890.648243385456
+            },
+            "completion_ratio": {
+              "mean": 0.5992734233862076,
+              "std": 0.012549722894902202,
+              "ci95_low": 0.5947825627238227,
+              "ci95_high": 0.6037642840485925
+            },
+            "pedestrian_completion_ratio": {
+              "mean": 0.9991871672846445,
+              "std": 0.002109299957709692,
+              "ci95_low": 0.9984323639886215,
+              "ci95_high": 0.9999419705806676
+            },
+            "bicycle_completion_ratio": {
+              "mean": 0.995024710614122,
+              "std": 0.005064939837572394,
+              "ci95_low": 0.9932122451705113,
+              "ci95_high": 0.9968371760577327
+            },
+            "conflicts": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            },
+            "overflows": {
+              "mean": 658.0333333333333,
+              "std": 60.89135793578895,
+              "ci95_low": 636.2436407382788,
+              "ci95_high": 679.8230259283878
+            },
+            "max_queue": {
+              "mean": 79.0,
+              "std": 1.4142135623730951,
+              "ci95_low": 78.49393017609556,
+              "ci95_high": 79.50606982390444
+            },
+            "emergency_average_wait": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            },
+            "emergency_completion_ratio": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            }
+          }
+        },
+        "random": {
+          "runs": 30,
+          "metrics": {
+            "reward": {
+              "mean": -32444.552833333346,
+              "std": 1123.457034597074,
+              "ci95_low": -32846.57677002131,
+              "ci95_high": -32042.52889664538
+            },
+            "vehicle_average_wait": {
+              "mean": 151.98178251568513,
+              "std": 2.8529335525231674,
+              "ci95_low": 150.960873355322,
+              "ci95_high": 153.00269167604824
+            },
+            "pedestrian_average_wait": {
+              "mean": 12.61327121310343,
+              "std": 0.6659823043547503,
+              "ci95_low": 12.374952506187109,
+              "ci95_high": 12.85158992001975
+            },
+            "bicycle_average_wait": {
+              "mean": 2.7976499145319407,
+              "std": 0.1886728078992599,
+              "ci95_low": 2.7301342173207552,
+              "ci95_high": 2.865165611743126
+            },
+            "throughput": {
+              "mean": 2051.766666666667,
+              "std": 10.864949444741178,
+              "ci95_low": 2047.878694440602,
+              "ci95_high": 2055.654638892732
+            },
+            "completion_ratio": {
+              "mean": 0.6524729872356423,
+              "std": 0.011647138592111044,
+              "ci95_low": 0.6483051122179473,
+              "ci95_high": 0.6566408622533373
+            },
+            "pedestrian_completion_ratio": {
+              "mean": 0.9968599419953733,
+              "std": 0.004288544079249793,
+              "ci95_low": 0.9953253062057472,
+              "ci95_high": 0.9983945777849994
+            },
+            "bicycle_completion_ratio": {
+              "mean": 0.9931768122663572,
+              "std": 0.004975399244568946,
+              "ci95_low": 0.9913963885124455,
+              "ci95_high": 0.994957236020269
+            },
+            "conflicts": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            },
+            "overflows": {
+              "mean": 509.26666666666665,
+              "std": 52.70996328859523,
+              "ci95_low": 490.40464854635724,
+              "ci95_high": 528.1286847869761
+            },
+            "max_queue": {
+              "mean": 78.03333333333333,
+              "std": 1.6501480254047294,
+              "ci95_low": 77.44283544613197,
+              "ci95_high": 78.6238312205347
+            },
+            "emergency_average_wait": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            },
+            "emergency_completion_ratio": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            }
+          }
+        },
+        "shared_dqn": {
+          "runs": 30,
+          "metrics": {
+            "reward": {
+              "mean": -19354.56616666667,
+              "std": 1036.7394925360684,
+              "ci95_low": -19725.5586294614,
+              "ci95_high": -18983.57370387194
+            },
+            "vehicle_average_wait": {
+              "mean": 118.7322824781508,
+              "std": 2.394505363191739,
+              "ci95_low": 117.87541973851248,
+              "ci95_high": 119.58914521778911
+            },
+            "pedestrian_average_wait": {
+              "mean": 12.727041296226481,
+              "std": 0.5967591105973362,
+              "ci95_low": 12.513493791062839,
+              "ci95_high": 12.940588801390124
+            },
+            "bicycle_average_wait": {
+              "mean": 2.436865049842828,
+              "std": 0.15411272406977203,
+              "ci95_low": 2.3817165198000603,
+              "ci95_high": 2.492013579885596
+            },
+            "throughput": {
+              "mean": 2508.866666666667,
+              "std": 15.906479558784309,
+              "ci95_low": 2503.1746060589708,
+              "ci95_high": 2514.558727274363
+            },
+            "completion_ratio": {
+              "mean": 0.7959200212450875,
+              "std": 0.014817771310842795,
+              "ci95_low": 0.790617549880472,
+              "ci95_high": 0.8012224926097031
+            },
+            "pedestrian_completion_ratio": {
+              "mean": 0.9980315894169729,
+              "std": 0.003225567631220831,
+              "ci95_low": 0.9968773348640858,
+              "ci95_high": 0.99918584396986
+            },
+            "bicycle_completion_ratio": {
+              "mean": 0.9943348504311132,
+              "std": 0.005492626269410759,
+              "ci95_low": 0.9923693393634148,
+              "ci95_high": 0.9963003614988117
+            },
+            "conflicts": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            },
+            "overflows": {
+              "mean": 278.3,
+              "std": 46.16398805458047,
+              "ci95_low": 261.7804290334301,
+              "ci95_high": 294.8195709665699
+            },
+            "max_queue": {
+              "mean": 62.833333333333336,
+              "std": 6.644070902761314,
+              "ci95_low": 60.45578309535736,
+              "ci95_high": 65.21088357130931
+            },
+            "emergency_average_wait": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            },
+            "emergency_completion_ratio": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            }
+          }
+        }
+      },
+      "paired_dqn_comparisons": {
+        "fixed_time": {
+          "vehicle_average_wait": {
+            "mean_difference": 6.413143953923976,
+            "ci95_low": 4.324308958495028,
+            "ci95_high": 8.501978949352925,
+            "statistically_significant_95": true,
+            "improvement_percent": -5.709751729034751
+          },
+          "overflows": {
+            "mean_difference": 161.16666666666666,
+            "ci95_low": 144.8742742996094,
+            "ci95_high": 177.45905903372392,
+            "statistically_significant_95": true,
+            "improvement_percent": -137.59248719408083
+          },
+          "max_queue": {
+            "mean_difference": -7.4,
+            "ci95_low": -10.055682157965808,
+            "ci95_high": -4.744317842034192,
+            "statistically_significant_95": true,
+            "improvement_percent": 10.536307546274323
+          }
+        },
+        "queue_heuristic": {
+          "vehicle_average_wait": {
+            "mean_difference": -40.199245459313325,
+            "ci95_low": -41.186110461384914,
+            "ci95_high": -39.212380457241736,
+            "statistically_significant_95": true,
+            "improvement_percent": 25.293436727752834
+          },
+          "overflows": {
+            "mean_difference": -379.73333333333335,
+            "ci95_low": -401.59756400224313,
+            "ci95_high": -357.86910266442356,
+            "statistically_significant_95": true,
+            "improvement_percent": 57.70730966009827
+          },
+          "max_queue": {
+            "mean_difference": -16.166666666666668,
+            "ci95_low": -18.564559291899414,
+            "ci95_high": -13.768774041433922,
+            "statistically_significant_95": true,
+            "improvement_percent": 20.464135021097043
+          }
+        }
+      }
+    },
+    "unbalanced": {
+      "controllers": {
+        "fixed_time": {
+          "runs": 30,
+          "metrics": {
+            "reward": {
+              "mean": -8418.510333333334,
+              "std": 1911.676076229306,
+              "ci95_low": -9102.594831601255,
+              "ci95_high": -7734.425835065413
+            },
+            "vehicle_average_wait": {
+              "mean": 90.7580223666765,
+              "std": 9.173932419564059,
+              "ci95_low": 87.47517281155736,
+              "ci95_high": 94.04087192179564
+            },
+            "pedestrian_average_wait": {
+              "mean": 12.816549566301443,
+              "std": 0.6316125974560746,
+              "ci95_low": 12.590529901043777,
+              "ci95_high": 13.04256923155911
+            },
+            "bicycle_average_wait": {
+              "mean": 2.9053321164396197,
+              "std": 0.23988867700486347,
+              "ci95_low": 2.819489055845005,
+              "ci95_high": 2.9911751770342345
+            },
+            "throughput": {
+              "mean": 1821.3666666666666,
+              "std": 23.59351654562129,
+              "ci95_low": 1812.9238352010332,
+              "ci95_high": 1829.8094981323
+            },
+            "completion_ratio": {
+              "mean": 0.8589000907599774,
+              "std": 0.017748116032663342,
+              "ci95_low": 0.852549009003829,
+              "ci95_high": 0.8652511725161258
+            },
+            "pedestrian_completion_ratio": {
+              "mean": 0.998904652520521,
+              "std": 0.0028510945226933675,
+              "ci95_low": 0.9978844014485307,
+              "ci95_high": 0.9999249035925112
+            },
+            "bicycle_completion_ratio": {
+              "mean": 0.9961826125186228,
+              "std": 0.003637854136278948,
+              "ci95_low": 0.994880823134672,
+              "ci95_high": 0.9974844019025737
+            },
+            "conflicts": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            },
+            "overflows": {
+              "mean": 28.5,
+              "std": 21.167232321159304,
+              "ci95_low": 20.925403193462426,
+              "ci95_high": 36.07459680653757
+            },
+            "max_queue": {
+              "mean": 72.43333333333334,
+              "std": 4.264394150552265,
+              "ci95_low": 70.90733948470431,
+              "ci95_high": 73.95932718196237
+            },
+            "emergency_average_wait": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            },
+            "emergency_completion_ratio": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            }
+          }
+        },
+        "queue_heuristic": {
+          "runs": 30,
+          "metrics": {
+            "reward": {
+              "mean": -68.96616666666664,
+              "std": 205.57703027585603,
+              "ci95_low": -142.53096216751243,
+              "ci95_high": 4.598628834179138
+            },
+            "vehicle_average_wait": {
+              "mean": 23.58611790313539,
+              "std": 2.089811041041916,
+              "ci95_low": 22.83828862637541,
+              "ci95_high": 24.333947179895368
+            },
+            "pedestrian_average_wait": {
+              "mean": 12.816496452514903,
+              "std": 0.7292016895641081,
+              "ci95_low": 12.555554979142745,
+              "ci95_high": 13.077437925887061
+            },
+            "bicycle_average_wait": {
+              "mean": 2.651269836301538,
+              "std": 0.17276397853613917,
+              "ci95_low": 2.589447040564731,
+              "ci95_high": 2.713092632038345
+            },
+            "throughput": {
+              "mean": 2067.366666666667,
+              "std": 43.70077197561123,
+              "ci95_low": 2051.728546253598,
+              "ci95_high": 2083.0047870797357
+            },
+            "completion_ratio": {
+              "mean": 0.9783788668758001,
+              "std": 0.0044174939045827965,
+              "ci95_low": 0.9767980869838014,
+              "ci95_high": 0.9799596467677988
+            },
+            "pedestrian_completion_ratio": {
+              "mean": 0.9994707661290323,
+              "std": 0.0020143358787488856,
+              "ci95_low": 0.9987499452922329,
+              "ci95_high": 1.0001915869658318
+            },
+            "bicycle_completion_ratio": {
+              "mean": 0.9928947190548925,
+              "std": 0.005536054529985996,
+              "ci95_low": 0.9909136673837332,
+              "ci95_high": 0.9948757707260517
+            },
+            "conflicts": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            },
+            "overflows": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            },
+            "max_queue": {
+              "mean": 11.1,
+              "std": 2.468421246115797,
+              "ci95_low": 10.216686801357213,
+              "ci95_high": 11.983313198642787
+            },
+            "emergency_average_wait": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            },
+            "emergency_completion_ratio": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            }
+          }
+        },
+        "random": {
+          "runs": 30,
+          "metrics": {
+            "reward": {
+              "mean": -17430.803999999996,
+              "std": 1617.028583912587,
+              "ci95_low": -18009.450247272507,
+              "ci95_high": -16852.157752727486
+            },
+            "vehicle_average_wait": {
+              "mean": 129.7872422810628,
+              "std": 6.307187585477965,
+              "ci95_low": 127.53024418994067,
+              "ci95_high": 132.0442403721849
+            },
+            "pedestrian_average_wait": {
+              "mean": 12.582681411684735,
+              "std": 0.7425364186405693,
+              "ci95_low": 12.316968166795823,
+              "ci95_high": 12.848394656573648
+            },
+            "bicycle_average_wait": {
+              "mean": 2.8409903151402807,
+              "std": 0.19141259090916388,
+              "ci95_low": 2.7724941991703953,
+              "ci95_high": 2.909486431110166
+            },
+            "throughput": {
+              "mean": 1575.8666666666666,
+              "std": 32.209158403433506,
+              "ci95_low": 1564.3407673576658,
+              "ci95_high": 1587.3925659756674
+            },
+            "completion_ratio": {
+              "mean": 0.7386462140189677,
+              "std": 0.01828052698411016,
+              "ci95_low": 0.7321046114506787,
+              "ci95_high": 0.7451878165872566
+            },
+            "pedestrian_completion_ratio": {
+              "mean": 0.9974713084924948,
+              "std": 0.0044605431558860514,
+              "ci95_low": 0.9958751236237614,
+              "ci95_high": 0.9990674933612281
+            },
+            "bicycle_completion_ratio": {
+              "mean": 0.9940731097856468,
+              "std": 0.006188947935354571,
+              "ci95_low": 0.9918584232099199,
+              "ci95_high": 0.9962877963613737
+            },
+            "conflicts": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            },
+            "overflows": {
+              "mean": 231.23333333333332,
+              "std": 45.71778747877048,
+              "ci95_low": 214.87343319218476,
+              "ci95_high": 247.59323347448188
+            },
+            "max_queue": {
+              "mean": 79.96666666666667,
+              "std": 0.18257418583505536,
+              "ci95_low": 79.90133333333334,
+              "ci95_high": 80.032
+            },
+            "emergency_average_wait": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            },
+            "emergency_completion_ratio": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            }
+          }
+        },
+        "shared_dqn": {
+          "runs": 30,
+          "metrics": {
+            "reward": {
+              "mean": 39.89966666666669,
+              "std": 129.0964293019204,
+              "ci95_low": -6.29689726239468,
+              "ci95_high": 86.09623059572806
+            },
+            "vehicle_average_wait": {
+              "mean": 22.453143750033185,
+              "std": 1.3211530782633416,
+              "ci95_low": 21.980375192683468,
+              "ci95_high": 22.9259123073829
+            },
+            "pedestrian_average_wait": {
+              "mean": 13.052513052892186,
+              "std": 0.7995726958167084,
+              "ci95_low": 12.766389638341021,
+              "ci95_high": 13.33863646744335
+            },
+            "bicycle_average_wait": {
+              "mean": 2.872489362272918,
+              "std": 0.2256752645736617,
+              "ci95_low": 2.79173250599533,
+              "ci95_high": 2.953246218550506
+            },
+            "throughput": {
+              "mean": 2078.6666666666665,
+              "std": 47.012348585666615,
+              "ci95_low": 2061.8435137829115,
+              "ci95_high": 2095.4898195504215
+            },
+            "completion_ratio": {
+              "mean": 0.9791562759977401,
+              "std": 0.003807233072283433,
+              "ci95_low": 0.9777938751399655,
+              "ci95_high": 0.9805186768555147
+            },
+            "pedestrian_completion_ratio": {
+              "mean": 0.997252645165074,
+              "std": 0.0045913120200271745,
+              "ci95_low": 0.9956096652592905,
+              "ci95_high": 0.9988956250708574
+            },
+            "bicycle_completion_ratio": {
+              "mean": 0.994472848591239,
+              "std": 0.005124458796338385,
+              "ci95_low": 0.9926390845617689,
+              "ci95_high": 0.9963066126207091
+            },
+            "conflicts": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            },
+            "overflows": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            },
+            "max_queue": {
+              "mean": 10.833333333333334,
+              "std": 2.5472545509089657,
+              "ci95_low": 9.92180999886952,
+              "ci95_high": 11.744856667797148
+            },
+            "emergency_average_wait": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            },
+            "emergency_completion_ratio": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            }
+          }
+        }
+      },
+      "paired_dqn_comparisons": {
+        "fixed_time": {
+          "vehicle_average_wait": {
+            "mean_difference": -68.30487861664331,
+            "ci95_low": -71.36929384262989,
+            "ci95_high": -65.24046339065673,
+            "statistically_significant_95": true,
+            "improvement_percent": 75.26043079771065
+          },
+          "overflows": {
+            "mean_difference": -28.5,
+            "ci95_low": -36.07459680653757,
+            "ci95_high": -20.92540319346243,
+            "statistically_significant_95": true,
+            "improvement_percent": 100.0
+          },
+          "max_queue": {
+            "mean_difference": -61.6,
+            "ci95_low": -63.256197667141116,
+            "ci95_high": -59.94380233285889,
+            "statistically_significant_95": true,
+            "improvement_percent": 85.04371836171191
+          }
+        },
+        "queue_heuristic": {
+          "vehicle_average_wait": {
+            "mean_difference": -1.1329741531022017,
+            "ci95_low": -1.8549848370908781,
+            "ci95_high": -0.4109634691135253,
+            "statistically_significant_95": true,
+            "improvement_percent": 4.80356351034603
+          },
+          "overflows": {
+            "mean_difference": 0.0,
+            "ci95_low": 0.0,
+            "ci95_high": 0.0,
+            "statistically_significant_95": false,
+            "improvement_percent": 0.0
+          },
+          "max_queue": {
+            "mean_difference": -0.26666666666666666,
+            "ci95_low": -1.605381690750886,
+            "ci95_high": 1.0720483574175528,
+            "statistically_significant_95": false,
+            "improvement_percent": 2.402402402402394
+          }
+        }
+      }
+    },
+    "road_closure": {
+      "controllers": {
+        "fixed_time": {
+          "runs": 30,
+          "metrics": {
+            "reward": {
+              "mean": -608.3286666666664,
+              "std": 301.86885074177655,
+              "ci95_low": -716.3510475868281,
+              "ci95_high": -500.3062857465048
+            },
+            "vehicle_average_wait": {
+              "mean": 27.745397431844744,
+              "std": 2.071195852102708,
+              "ci95_low": 27.004229514895655,
+              "ci95_high": 28.48656534879383
+            },
+            "pedestrian_average_wait": {
+              "mean": 12.892073397678574,
+              "std": 0.8006621226627197,
+              "ci95_low": 12.605560136737312,
+              "ci95_high": 13.178586658619837
+            },
+            "bicycle_average_wait": {
+              "mean": 2.907415636794662,
+              "std": 0.20484913635012938,
+              "ci95_low": 2.8341113147899097,
+              "ci95_high": 2.9807199587994146
+            },
+            "throughput": {
+              "mean": 1950.6,
+              "std": 40.98746654519041,
+              "ci95_low": 1935.9328234654977,
+              "ci95_high": 1965.2671765345021
+            },
+            "completion_ratio": {
+              "mean": 0.9799976704007664,
+              "std": 0.0030186757340066217,
+              "ci95_low": 0.9789174511624712,
+              "ci95_high": 0.9810778896390615
+            },
+            "pedestrian_completion_ratio": {
+              "mean": 0.9986611752982756,
+              "std": 0.0036844471532025973,
+              "ci95_low": 0.997342712817349,
+              "ci95_high": 0.9999796377792022
+            },
+            "bicycle_completion_ratio": {
+              "mean": 0.9938589559964204,
+              "std": 0.00592344323183378,
+              "ci95_low": 0.9917392790586517,
+              "ci95_high": 0.9959786329341891
+            },
+            "conflicts": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            },
+            "overflows": {
+              "mean": 0.8,
+              "std": 1.8827712516943997,
+              "ci95_low": 0.12625896035216388,
+              "ci95_high": 1.473741039647836
+            },
+            "max_queue": {
+              "mean": 11.4,
+              "std": 3.179676843263511,
+              "ci95_low": 10.262167254680268,
+              "ci95_high": 12.537832745319733
+            },
+            "emergency_average_wait": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            },
+            "emergency_completion_ratio": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            }
+          }
+        },
+        "queue_heuristic": {
+          "runs": 30,
+          "metrics": {
+            "reward": {
+              "mean": -4336.210666666666,
+              "std": 1214.8341035484502,
+              "ci95_low": -4770.9334675315,
+              "ci95_high": -3901.4878658018315
+            },
+            "vehicle_average_wait": {
+              "mean": 66.86578244437196,
+              "std": 10.98240089876158,
+              "ci95_low": 62.93578075526503,
+              "ci95_high": 70.79578413347889
+            },
+            "pedestrian_average_wait": {
+              "mean": 12.749326642718035,
+              "std": 0.9955647230761744,
+              "ci95_low": 12.393068381945035,
+              "ci95_high": 13.105584903491035
+            },
+            "bicycle_average_wait": {
+              "mean": 2.9051853880934373,
+              "std": 0.19641119574276264,
+              "ci95_low": 2.834900544356253,
+              "ci95_high": 2.9754702318306214
+            },
+            "throughput": {
+              "mean": 1811.6,
+              "std": 24.194043154006547,
+              "ci95_low": 1802.942272847434,
+              "ci95_high": 1820.2577271525658
+            },
+            "completion_ratio": {
+              "mean": 0.9089966001820504,
+              "std": 0.018061758149296624,
+              "ci95_low": 0.9025332830358898,
+              "ci95_high": 0.9154599173282111
+            },
+            "pedestrian_completion_ratio": {
+              "mean": 0.9980008703209474,
+              "std": 0.004517774328110305,
+              "ci95_low": 0.9963842055402545,
+              "ci95_high": 0.9996175351016403
+            },
+            "bicycle_completion_ratio": {
+              "mean": 0.9949229837387582,
+              "std": 0.005155138402438818,
+              "ci95_low": 0.9930782411532413,
+              "ci95_high": 0.9967677263242751
+            },
+            "conflicts": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            },
+            "overflows": {
+              "mean": 1.6,
+              "std": 3.317664321736625,
+              "ci95_low": 0.41278906966645224,
+              "ci95_high": 2.787210930333548
+            },
+            "max_queue": {
+              "mean": 50.3,
+              "std": 9.955591047418947,
+              "ci95_low": 46.73743749722101,
+              "ci95_high": 53.862562502778985
+            },
+            "emergency_average_wait": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            },
+            "emergency_completion_ratio": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            }
+          }
+        },
+        "random": {
+          "runs": 30,
+          "metrics": {
+            "reward": {
+              "mean": -1783.750666666667,
+              "std": 665.3551942393358,
+              "ci95_low": -2021.8449651102358,
+              "ci95_high": -1545.6563682230983
+            },
+            "vehicle_average_wait": {
+              "mean": 40.566296421234945,
+              "std": 6.497977533648502,
+              "ci95_low": 38.24102502398544,
+              "ci95_high": 42.89156781848445
+            },
+            "pedestrian_average_wait": {
+              "mean": 12.727860197420727,
+              "std": 0.7155703531218397,
+              "ci95_low": 12.471796635148038,
+              "ci95_high": 12.983923759693415
+            },
+            "bicycle_average_wait": {
+              "mean": 2.753789624588195,
+              "std": 0.15660166848022067,
+              "ci95_low": 2.697750437226748,
+              "ci95_high": 2.8098288119496426
+            },
+            "throughput": {
+              "mean": 1916.8,
+              "std": 34.24395239837349,
+              "ci95_low": 1904.5459590113414,
+              "ci95_high": 1929.0540409886585
+            },
+            "completion_ratio": {
+              "mean": 0.9617129109640753,
+              "std": 0.009961378245198669,
+              "ci95_low": 0.9581482775391674,
+              "ci95_high": 0.9652775443889832
+            },
+            "pedestrian_completion_ratio": {
+              "mean": 0.997995716018201,
+              "std": 0.00445302691549109,
+              "ci95_low": 0.9964022208015502,
+              "ci95_high": 0.9995892112348519
+            },
+            "bicycle_completion_ratio": {
+              "mean": 0.994245190615619,
+              "std": 0.005886641310544849,
+              "ci95_low": 0.9921386830762505,
+              "ci95_high": 0.9963516981549875
+            },
+            "conflicts": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            },
+            "overflows": {
+              "mean": 1.3,
+              "std": 3.323375932121868,
+              "ci95_low": 0.11074519613930223,
+              "ci95_high": 2.489254803860698
+            },
+            "max_queue": {
+              "mean": 27.366666666666667,
+              "std": 7.471709093748846,
+              "ci95_low": 24.69294990567502,
+              "ci95_high": 30.040383427658313
+            },
+            "emergency_average_wait": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            },
+            "emergency_completion_ratio": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            }
+          }
+        },
+        "shared_dqn": {
+          "runs": 30,
+          "metrics": {
+            "reward": {
+              "mean": -1879.9039999999998,
+              "std": 526.6995912059846,
+              "ci95_low": -2068.3810281264145,
+              "ci95_high": -1691.426971873585
+            },
+            "vehicle_average_wait": {
+              "mean": 41.18120757809857,
+              "std": 3.654422960737913,
+              "ci95_low": 39.87348911646141,
+              "ci95_high": 42.48892603973574
+            },
+            "pedestrian_average_wait": {
+              "mean": 12.806264513686854,
+              "std": 0.8115642742655234,
+              "ci95_low": 12.515849967898236,
+              "ci95_high": 13.096679059475472
+            },
+            "bicycle_average_wait": {
+              "mean": 2.7845547204482473,
+              "std": 0.15381349940268596,
+              "ci95_low": 2.72951326657743,
+              "ci95_high": 2.8395961743190643
+            },
+            "throughput": {
+              "mean": 1933.3333333333333,
+              "std": 45.84932845244551,
+              "ci95_low": 1916.9263618592863,
+              "ci95_high": 1949.7403048073802
+            },
+            "completion_ratio": {
+              "mean": 0.9693142723119368,
+              "std": 0.00948124713484927,
+              "ci95_low": 0.9659214515982986,
+              "ci95_high": 0.972707093025575
+            },
+            "pedestrian_completion_ratio": {
+              "mean": 0.9968868419905987,
+              "std": 0.0057814679386070595,
+              "ci95_low": 0.9948179702590263,
+              "ci95_high": 0.9989557137221712
+            },
+            "bicycle_completion_ratio": {
+              "mean": 0.9943523941918884,
+              "std": 0.0055053455452310765,
+              "ci95_low": 0.9923823315897924,
+              "ci95_high": 0.9963224567939843
+            },
+            "conflicts": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            },
+            "overflows": {
+              "mean": 3.5,
+              "std": 6.2408553790381145,
+              "ci95_low": 1.2667385841052692,
+              "ci95_high": 5.733261415894731
+            },
+            "max_queue": {
+              "mean": 14.5,
+              "std": 6.372083511369109,
+              "ci95_low": 12.219779200044057,
+              "ci95_high": 16.780220799955945
+            },
+            "emergency_average_wait": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            },
+            "emergency_completion_ratio": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            }
+          }
+        }
+      },
+      "paired_dqn_comparisons": {
+        "fixed_time": {
+          "vehicle_average_wait": {
+            "mean_difference": 13.435810146253827,
+            "ci95_low": 11.83105996018061,
+            "ci95_high": 15.040560332327043,
+            "statistically_significant_95": true,
+            "improvement_percent": -48.42536560976739
+          },
+          "overflows": {
+            "mean_difference": 2.7,
+            "ci95_low": 0.22407145480336244,
+            "ci95_high": 5.175928545196638,
+            "statistically_significant_95": true,
+            "improvement_percent": -337.5
+          },
+          "max_queue": {
+            "mean_difference": 3.1,
+            "ci95_low": 0.6723376931990588,
+            "ci95_high": 5.527662306800941,
+            "statistically_significant_95": true,
+            "improvement_percent": -27.192982456140346
+          }
+        },
+        "queue_heuristic": {
+          "vehicle_average_wait": {
+            "mean_difference": -25.6845748662734,
+            "ci95_low": -29.501924098231505,
+            "ci95_high": -21.867225634315297,
+            "statistically_significant_95": true,
+            "improvement_percent": 38.41213536630833
+          },
+          "overflows": {
+            "mean_difference": 1.9,
+            "ci95_low": -0.09428180256602103,
+            "ci95_high": 3.894281802566021,
+            "statistically_significant_95": false,
+            "improvement_percent": -118.75
+          },
+          "max_queue": {
+            "mean_difference": -35.8,
+            "ci95_low": -39.39126419005322,
+            "ci95_high": -32.20873580994677,
+            "statistically_significant_95": true,
+            "improvement_percent": 71.17296222664015
+          }
+        }
+      }
+    },
+    "emergency_surge": {
+      "controllers": {
+        "fixed_time": {
+          "runs": 30,
+          "metrics": {
+            "reward": {
+              "mean": 304.3595000000001,
+              "std": 77.6886417312835,
+              "ci95_low": 276.5589765950681,
+              "ci95_high": 332.1600234049321
+            },
+            "vehicle_average_wait": {
+              "mean": 16.36684762041613,
+              "std": 0.649763192132005,
+              "ci95_low": 16.13433284826952,
+              "ci95_high": 16.599362392562742
+            },
+            "pedestrian_average_wait": {
+              "mean": 12.665477708175532,
+              "std": 0.6067078083860078,
+              "ci95_low": 12.448370107230073,
+              "ci95_high": 12.88258530912099
+            },
+            "bicycle_average_wait": {
+              "mean": 2.8680835096876582,
+              "std": 0.15804034316814644,
+              "ci95_low": 2.8115294992009447,
+              "ci95_high": 2.9246375201743717
+            },
+            "throughput": {
+              "mean": 2140.4666666666667,
+              "std": 42.121935749255016,
+              "ci95_low": 2125.393525541242,
+              "ci95_high": 2155.5398077920913
+            },
+            "completion_ratio": {
+              "mean": 0.98038277264283,
+              "std": 0.0031327542649614575,
+              "ci95_low": 0.9792617309265106,
+              "ci95_high": 0.9815038143591495
+            },
+            "pedestrian_completion_ratio": {
+              "mean": 0.9986619749032111,
+              "std": 0.0030614732583496185,
+              "ci95_low": 0.9975664407675171,
+              "ci95_high": 0.999757509038905
+            },
+            "bicycle_completion_ratio": {
+              "mean": 0.992338975042746,
+              "std": 0.006249842094212037,
+              "ci95_low": 0.9901024977721271,
+              "ci95_high": 0.994575452313365
+            },
+            "conflicts": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            },
+            "overflows": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            },
+            "max_queue": {
+              "mean": 12.166666666666666,
+              "std": 2.2906606987464575,
+              "ci95_low": 11.346964262954598,
+              "ci95_high": 12.986369070378734
+            },
+            "emergency_average_wait": {
+              "mean": 16.17601059367998,
+              "std": 1.2337253192293616,
+              "ci95_low": 15.734527658103286,
+              "ci95_high": 16.617493529256674
+            },
+            "emergency_completion_ratio": {
+              "mean": 0.9790703696542903,
+              "std": 0.014762511884769573,
+              "ci95_low": 0.9737876726213357,
+              "ci95_high": 0.9843530666872449
+            }
+          }
+        },
+        "queue_heuristic": {
+          "runs": 30,
+          "metrics": {
+            "reward": {
+              "mean": -5835.9198333333325,
+              "std": 1247.6200871849514,
+              "ci95_low": -6282.374947765869,
+              "ci95_high": -5389.464718900796
+            },
+            "vehicle_average_wait": {
+              "mean": 77.0188820052779,
+              "std": 11.394114354051478,
+              "ci95_low": 72.94155054833307,
+              "ci95_high": 81.09621346222274
+            },
+            "pedestrian_average_wait": {
+              "mean": 12.673967684443191,
+              "std": 0.5325898116257229,
+              "ci95_low": 12.483382868009631,
+              "ci95_high": 12.864552500876751
+            },
+            "bicycle_average_wait": {
+              "mean": 2.9047940978090456,
+              "std": 0.2133577928112152,
+              "ci95_low": 2.8284449921934645,
+              "ci95_high": 2.981143203424627
+            },
+            "throughput": {
+              "mean": 1908.1333333333334,
+              "std": 10.091762886677406,
+              "ci95_low": 1904.5220423636893,
+              "ci95_high": 1911.7446243029776
+            },
+            "completion_ratio": {
+              "mean": 0.8745042256737497,
+              "std": 0.016052423713360083,
+              "ci95_low": 0.8687599396210635,
+              "ci95_high": 0.880248511726436
+            },
+            "pedestrian_completion_ratio": {
+              "mean": 0.9985688271609011,
+              "std": 0.0032767620706248514,
+              "ci95_low": 0.9973962529131508,
+              "ci95_high": 0.9997414014086514
+            },
+            "bicycle_completion_ratio": {
+              "mean": 0.9957906251182751,
+              "std": 0.00540984117334856,
+              "ci95_low": 0.9938547383167418,
+              "ci95_high": 0.9977265119198084
+            },
+            "conflicts": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            },
+            "overflows": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            },
+            "max_queue": {
+              "mean": 45.6,
+              "std": 9.038614480335905,
+              "ci95_low": 42.365573347544434,
+              "ci95_high": 48.83442665245557
+            },
+            "emergency_average_wait": {
+              "mean": 12.393064916192621,
+              "std": 0.9332001817680873,
+              "ci95_low": 12.059123519914051,
+              "ci95_high": 12.727006312471191
+            },
+            "emergency_completion_ratio": {
+              "mean": 0.9868279155580277,
+              "std": 0.013075955625262247,
+              "ci95_low": 0.9821487449315245,
+              "ci95_high": 0.991507086184531
+            }
+          }
+        },
+        "random": {
+          "runs": 30,
+          "metrics": {
+            "reward": {
+              "mean": -3302.8965,
+              "std": 817.4005042101555,
+              "ci95_low": -3595.3995138523724,
+              "ci95_high": -3010.3934861476273
+            },
+            "vehicle_average_wait": {
+              "mean": 51.59187867872943,
+              "std": 7.022408172368889,
+              "ci95_low": 49.07894218757292,
+              "ci95_high": 54.10481516988594
+            },
+            "pedestrian_average_wait": {
+              "mean": 12.454204370785833,
+              "std": 0.785877838376605,
+              "ci95_low": 12.172981598031287,
+              "ci95_high": 12.73542714354038
+            },
+            "bicycle_average_wait": {
+              "mean": 2.6746399571933153,
+              "std": 0.14641612628556575,
+              "ci95_low": 2.622245619295884,
+              "ci95_high": 2.7270342950907467
+            },
+            "throughput": {
+              "mean": 2027.0666666666666,
+              "std": 16.90120039265388,
+              "ci95_low": 2021.0186497800717,
+              "ci95_high": 2033.1146835532616
+            },
+            "completion_ratio": {
+              "mean": 0.9250490702214893,
+              "std": 0.011220937781471738,
+              "ci95_low": 0.9210337092051636,
+              "ci95_high": 0.929064431237815
+            },
+            "pedestrian_completion_ratio": {
+              "mean": 0.9978471176039855,
+              "std": 0.0036523067353319404,
+              "ci95_low": 0.9965401564238842,
+              "ci95_high": 0.9991540787840868
+            },
+            "bicycle_completion_ratio": {
+              "mean": 0.9938761379480077,
+              "std": 0.005667485694354172,
+              "ci95_low": 0.9918480542387057,
+              "ci95_high": 0.9959042216573096
+            },
+            "conflicts": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            },
+            "overflows": {
+              "mean": 0.16666666666666666,
+              "std": 0.9128709291752769,
+              "ci95_low": -0.16,
+              "ci95_high": 0.4933333333333333
+            },
+            "max_queue": {
+              "mean": 48.1,
+              "std": 13.580792724818489,
+              "ci95_low": 43.24017573753238,
+              "ci95_high": 52.95982426246762
+            },
+            "emergency_average_wait": {
+              "mean": 13.187971966414116,
+              "std": 0.8458886437350035,
+              "ci95_low": 12.885274602757523,
+              "ci95_high": 13.490669330070709
+            },
+            "emergency_completion_ratio": {
+              "mean": 0.9852255534935469,
+              "std": 0.011116723430102976,
+              "ci95_low": 0.981247485103914,
+              "ci95_high": 0.9892036218831798
+            }
+          }
+        },
+        "shared_dqn": {
+          "runs": 30,
+          "metrics": {
+            "reward": {
+              "mean": -1358.9076666666665,
+              "std": 255.08742758436594,
+              "ci95_low": -1450.189530306296,
+              "ci95_high": -1267.625803027037
+            },
+            "vehicle_average_wait": {
+              "mean": 33.34330742205723,
+              "std": 2.3819946902831926,
+              "ci95_low": 32.49092156922315,
+              "ci95_high": 34.19569327489131
+            },
+            "pedestrian_average_wait": {
+              "mean": 12.505716100332485,
+              "std": 0.7685306037072128,
+              "ci95_low": 12.230700955780597,
+              "ci95_high": 12.780731244884374
+            },
+            "bicycle_average_wait": {
+              "mean": 2.770493385615504,
+              "std": 0.17758060917821059,
+              "ci95_low": 2.7069469807395263,
+              "ci95_high": 2.834039790491482
+            },
+            "throughput": {
+              "mean": 2113.733333333333,
+              "std": 35.07325666848366,
+              "ci95_low": 2101.1825296229017,
+              "ci95_high": 2126.2841370437645
+            },
+            "completion_ratio": {
+              "mean": 0.964003790742304,
+              "std": 0.0050188813615890835,
+              "ci95_low": 0.9622078071126501,
+              "ci95_high": 0.965799774371958
+            },
+            "pedestrian_completion_ratio": {
+              "mean": 0.997991253950248,
+              "std": 0.004394396214531532,
+              "ci95_low": 0.9964187394604828,
+              "ci95_high": 0.9995637684400133
+            },
+            "bicycle_completion_ratio": {
+              "mean": 0.9947885341523732,
+              "std": 0.0078018786726719355,
+              "ci95_low": 0.9919966677249452,
+              "ci95_high": 0.9975804005798012
+            },
+            "conflicts": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            },
+            "overflows": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            },
+            "max_queue": {
+              "mean": 15.266666666666667,
+              "std": 2.970351579484679,
+              "ci95_low": 14.203740004980826,
+              "ci95_high": 16.32959332835251
+            },
+            "emergency_average_wait": {
+              "mean": 13.484126972439034,
+              "std": 0.8007166546168265,
+              "ci95_low": 13.19759419748861,
+              "ci95_high": 13.770659747389457
+            },
+            "emergency_completion_ratio": {
+              "mean": 0.9851947483329404,
+              "std": 0.010915650519216617,
+              "ci95_low": 0.9812886329603847,
+              "ci95_high": 0.9891008637054961
+            }
+          }
+        }
+      },
+      "paired_dqn_comparisons": {
+        "fixed_time": {
+          "vehicle_average_wait": {
+            "mean_difference": 16.976459801641106,
+            "ci95_low": 16.142107475863796,
+            "ci95_high": 17.810812127418416,
+            "statistically_significant_95": true,
+            "improvement_percent": -103.72467683064717
+          },
+          "overflows": {
+            "mean_difference": 0.0,
+            "ci95_low": 0.0,
+            "ci95_high": 0.0,
+            "statistically_significant_95": false,
+            "improvement_percent": 0.0
+          },
+          "max_queue": {
+            "mean_difference": 3.1,
+            "ci95_low": 1.7500624450372342,
+            "ci95_high": 4.449937554962766,
+            "statistically_significant_95": true,
+            "improvement_percent": -25.479452054794532
+          }
+        },
+        "queue_heuristic": {
+          "vehicle_average_wait": {
+            "mean_difference": -43.67557458322065,
+            "ci95_low": -47.578664254069245,
+            "ci95_high": -39.77248491237206,
+            "statistically_significant_95": true,
+            "improvement_percent": 56.70761954221524
+          },
+          "overflows": {
+            "mean_difference": 0.0,
+            "ci95_low": 0.0,
+            "ci95_high": 0.0,
+            "statistically_significant_95": false,
+            "improvement_percent": 0.0
+          },
+          "max_queue": {
+            "mean_difference": -30.333333333333332,
+            "ci95_low": -33.58916824870736,
+            "ci95_high": -27.07749841795931,
+            "statistically_significant_95": true,
+            "improvement_percent": 66.52046783625731
+          }
+        }
+      }
+    },
+    "sensor_failure": {
+      "controllers": {
+        "fixed_time": {
+          "runs": 30,
+          "metrics": {
+            "reward": {
+              "mean": 499.963166666667,
+              "std": 25.741036655012923,
+              "ci95_low": 490.751854999382,
+              "ci95_high": 509.17447833395204
+            },
+            "vehicle_average_wait": {
+              "mean": 15.902298068991088,
+              "std": 0.36637609431364787,
+              "ci95_low": 15.771192067418754,
+              "ci95_high": 16.03340407056342
+            },
+            "pedestrian_average_wait": {
+              "mean": 12.707744556117028,
+              "std": 0.7217458472021273,
+              "ci95_low": 12.449471121668816,
+              "ci95_high": 12.96601799056524
+            },
+            "bicycle_average_wait": {
+              "mean": 2.898922162419628,
+              "std": 0.22012714049266444,
+              "ci95_low": 2.82015067684656,
+              "ci95_high": 2.9776936479926963
+            },
+            "throughput": {
+              "mean": 1512.9333333333334,
+              "std": 34.641945208317786,
+              "ci95_low": 1500.536872446717,
+              "ci95_high": 1525.3297942199497
+            },
+            "completion_ratio": {
+              "mean": 0.9808170394035379,
+              "std": 0.0030604864427373033,
+              "ci95_low": 0.9797218583952756,
+              "ci95_high": 0.9819122204118003
+            },
+            "pedestrian_completion_ratio": {
+              "mean": 0.9991447639236782,
+              "std": 0.002610466506908683,
+              "ci95_low": 0.9982106204812671,
+              "ci95_high": 1.0000789073660894
+            },
+            "bicycle_completion_ratio": {
+              "mean": 0.994920166668066,
+              "std": 0.005264177389741547,
+              "ci95_low": 0.9930364049820603,
+              "ci95_high": 0.9968039283540718
+            },
+            "conflicts": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            },
+            "overflows": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            },
+            "max_queue": {
+              "mean": 8.366666666666667,
+              "std": 1.809616711814455,
+              "ci95_low": 7.71910364291392,
+              "ci95_high": 9.014229690419414
+            },
+            "emergency_average_wait": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            },
+            "emergency_completion_ratio": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            }
+          }
+        },
+        "queue_heuristic": {
+          "runs": 30,
+          "metrics": {
+            "reward": {
+              "mean": -2658.446166666666,
+              "std": 419.35390011401313,
+              "ci95_low": -2808.5100325712056,
+              "ci95_high": -2508.3823007621268
+            },
+            "vehicle_average_wait": {
+              "mean": 50.580618148517964,
+              "std": 3.1497143045541476,
+              "ci95_low": 49.453507359974644,
+              "ci95_high": 51.70772893706128
+            },
+            "pedestrian_average_wait": {
+              "mean": 12.76062874673372,
+              "std": 0.8332377654420821,
+              "ci95_low": 12.462458441733807,
+              "ci95_high": 13.058799051733635
+            },
+            "bicycle_average_wait": {
+              "mean": 2.7367731411346323,
+              "std": 0.1727674177355779,
+              "ci95_low": 2.674949114696112,
+              "ci95_high": 2.7985971675731527
+            },
+            "throughput": {
+              "mean": 1502.8,
+              "std": 36.325539604886906,
+              "ci95_low": 1489.8010725959725,
+              "ci95_high": 1515.7989274040274
+            },
+            "completion_ratio": {
+              "mean": 0.9737033370613123,
+              "std": 0.007799630952244841,
+              "ci95_low": 0.9709122749703091,
+              "ci95_high": 0.9764943991523155
+            },
+            "pedestrian_completion_ratio": {
+              "mean": 0.9991880822589484,
+              "std": 0.002479316679930787,
+              "ci95_low": 0.9983008701793877,
+              "ci95_high": 1.000075294338509
+            },
+            "bicycle_completion_ratio": {
+              "mean": 0.9934339174145379,
+              "std": 0.00735475343679771,
+              "ci95_low": 0.9908020526978857,
+              "ci95_high": 0.9960657821311901
+            },
+            "conflicts": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            },
+            "overflows": {
+              "mean": 19.166666666666668,
+              "std": 9.591962631622206,
+              "ci95_low": 15.734226921330418,
+              "ci95_high": 22.599106412002918
+            },
+            "max_queue": {
+              "mean": 4.766666666666667,
+              "std": 1.1651056880677462,
+              "ci95_low": 4.349738950741576,
+              "ci95_high": 5.183594382591758
+            },
+            "emergency_average_wait": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            },
+            "emergency_completion_ratio": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            }
+          }
+        },
+        "random": {
+          "runs": 30,
+          "metrics": {
+            "reward": {
+              "mean": 693.2136666666665,
+              "std": 35.045549201725755,
+              "ci95_low": 680.6727779458776,
+              "ci95_high": 705.7545553874555
+            },
+            "vehicle_average_wait": {
+              "mean": 13.14240863155293,
+              "std": 0.4836863536759484,
+              "ci95_low": 12.969323692797982,
+              "ci95_high": 13.31549357030788
+            },
+            "pedestrian_average_wait": {
+              "mean": 12.801419514107703,
+              "std": 0.7648023917350567,
+              "ci95_low": 12.52773849307607,
+              "ci95_high": 13.075100535139336
+            },
+            "bicycle_average_wait": {
+              "mean": 2.792929924732738,
+              "std": 0.222410187906187,
+              "ci95_low": 2.7133414611350863,
+              "ci95_high": 2.8725183883303895
+            },
+            "throughput": {
+              "mean": 1523.8,
+              "std": 37.94133402486273,
+              "ci95_low": 1510.222867988593,
+              "ci95_high": 1537.377132011407
+            },
+            "completion_ratio": {
+              "mean": 0.9864683771607591,
+              "std": 0.003191800966366006,
+              "ci95_low": 0.9853262058537067,
+              "ci95_high": 0.9876105484678115
+            },
+            "pedestrian_completion_ratio": {
+              "mean": 0.9985452364155533,
+              "std": 0.0033289761383745874,
+              "ci95_low": 0.9973539776036222,
+              "ci95_high": 0.9997364952274843
+            },
+            "bicycle_completion_ratio": {
+              "mean": 0.9942142976887213,
+              "std": 0.006685263421854519,
+              "ci95_low": 0.9918220068970989,
+              "ci95_high": 0.9966065884803437
+            },
+            "conflicts": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            },
+            "overflows": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            },
+            "max_queue": {
+              "mean": 4.633333333333334,
+              "std": 1.4259499757471625,
+              "ci95_low": 4.123063687840766,
+              "ci95_high": 5.143602978825902
+            },
+            "emergency_average_wait": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            },
+            "emergency_completion_ratio": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            }
+          }
+        },
+        "shared_dqn": {
+          "runs": 30,
+          "metrics": {
+            "reward": {
+              "mean": 793.5976666666664,
+              "std": 86.59754043784996,
+              "ci95_low": 762.6091348027793,
+              "ci95_high": 824.5861985305536
+            },
+            "vehicle_average_wait": {
+              "mean": 11.633308144518796,
+              "std": 1.2871875062216491,
+              "ci95_low": 11.17269401102647,
+              "ci95_high": 12.093922278011123
+            },
+            "pedestrian_average_wait": {
+              "mean": 12.75029212688636,
+              "std": 0.6135442275421839,
+              "ci95_low": 12.530738144764427,
+              "ci95_high": 12.96984610900829
+            },
+            "bicycle_average_wait": {
+              "mean": 2.838738530634908,
+              "std": 0.21198754141931728,
+              "ci95_low": 2.762879763182567,
+              "ci95_high": 2.9145972980872497
+            },
+            "throughput": {
+              "mean": 1520.5333333333333,
+              "std": 41.24421241181924,
+              "ci95_low": 1505.774281470401,
+              "ci95_high": 1535.2923851962655
+            },
+            "completion_ratio": {
+              "mean": 0.987840641629106,
+              "std": 0.0033238184330508934,
+              "ci95_low": 0.9866512284783215,
+              "ci95_high": 0.9890300547798905
+            },
+            "pedestrian_completion_ratio": {
+              "mean": 0.9987985890652558,
+              "std": 0.003958129255712219,
+              "ci95_low": 0.9973821907017243,
+              "ci95_high": 1.0002149874287873
+            },
+            "bicycle_completion_ratio": {
+              "mean": 0.9951252411940303,
+              "std": 0.006293959018231462,
+              "ci95_low": 0.9928729768849021,
+              "ci95_high": 0.9973775055031586
+            },
+            "conflicts": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            },
+            "overflows": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            },
+            "max_queue": {
+              "mean": 3.966666666666667,
+              "std": 1.129031728375319,
+              "ci95_low": 3.562647851430131,
+              "ci95_high": 4.370685481903203
+            },
+            "emergency_average_wait": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            },
+            "emergency_completion_ratio": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            }
+          }
+        }
+      },
+      "paired_dqn_comparisons": {
+        "fixed_time": {
+          "vehicle_average_wait": {
+            "mean_difference": -4.268989924472294,
+            "ci95_low": -4.769598778927257,
+            "ci95_high": -3.76838107001733,
+            "statistically_significant_95": true,
+            "improvement_percent": 26.84511324056156
+          },
+          "overflows": {
+            "mean_difference": 0.0,
+            "ci95_low": 0.0,
+            "ci95_high": 0.0,
+            "statistically_significant_95": false,
+            "improvement_percent": 0.0
+          },
+          "max_queue": {
+            "mean_difference": -4.4,
+            "ci95_low": -5.166917340328508,
+            "ci95_high": -3.633082659671493,
+            "statistically_significant_95": true,
+            "improvement_percent": 52.58964143426295
+          }
+        },
+        "queue_heuristic": {
+          "vehicle_average_wait": {
+            "mean_difference": -38.947310003999185,
+            "ci95_low": -40.16395291414178,
+            "ci95_high": -37.73066709385659,
+            "statistically_significant_95": true,
+            "improvement_percent": 77.00046268639827
+          },
+          "overflows": {
+            "mean_difference": -19.166666666666668,
+            "ci95_low": -22.599106412002918,
+            "ci95_high": -15.734226921330418,
+            "statistically_significant_95": true,
+            "improvement_percent": 100.0
+          },
+          "max_queue": {
+            "mean_difference": -0.8,
+            "ci95_low": -1.2642013039347397,
+            "ci95_high": -0.33579869606526036,
+            "statistically_significant_95": true,
+            "improvement_percent": 16.78321678321678
+          }
+        }
+      }
+    },
+    "calibrated_lemgo": {
+      "controllers": {
+        "fixed_time": {
+          "runs": 30,
+          "metrics": {
+            "reward": {
+              "mean": 650.7591666666669,
+              "std": 81.69111304262964,
+              "ci95_low": 621.5263772973805,
+              "ci95_high": 679.9919560359534
+            },
+            "vehicle_average_wait": {
+              "mean": 16.091502833091162,
+              "std": 0.8302766504331616,
+              "ci95_low": 15.794392149488608,
+              "ci95_high": 16.388613516693717
+            },
+            "pedestrian_average_wait": {
+              "mean": 12.593043868841123,
+              "std": 0.845727790972799,
+              "ci95_low": 12.290404065606243,
+              "ci95_high": 12.895683672076004
+            },
+            "bicycle_average_wait": {
+              "mean": 2.9096460511166393,
+              "std": 0.9749980211718601,
+              "ci95_low": 2.5607474901004044,
+              "ci95_high": 3.2585446121328743
+            },
+            "throughput": {
+              "mean": 2145.5333333333333,
+              "std": 41.84596823436237,
+              "ci95_low": 2130.5589459148314,
+              "ci95_high": 2160.507720751835
+            },
+            "completion_ratio": {
+              "mean": 0.9805796046532766,
+              "std": 0.0032029098095090755,
+              "ci95_low": 0.9794334580977592,
+              "ci95_high": 0.9817257512087941
+            },
+            "pedestrian_completion_ratio": {
+              "mean": 0.9985404942510417,
+              "std": 0.0037880945545572453,
+              "ci95_low": 0.9971849420238793,
+              "ci95_high": 0.9998960464782042
+            },
+            "bicycle_completion_ratio": {
+              "mean": 1.0,
+              "std": 0.0,
+              "ci95_low": 1.0,
+              "ci95_high": 1.0
+            },
+            "conflicts": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            },
+            "overflows": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            },
+            "max_queue": {
+              "mean": 12.066666666666666,
+              "std": 2.0998084203800236,
+              "ci95_low": 11.315259873656132,
+              "ci95_high": 12.818073459677201
+            },
+            "emergency_average_wait": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            },
+            "emergency_completion_ratio": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            }
+          }
+        },
+        "queue_heuristic": {
+          "runs": 30,
+          "metrics": {
+            "reward": {
+              "mean": -6112.522833333333,
+              "std": 1639.0077958145387,
+              "ci95_low": -6699.034240573704,
+              "ci95_high": -5526.011426092963
+            },
+            "vehicle_average_wait": {
+              "mean": 81.25437332320058,
+              "std": 14.699643653419104,
+              "ci95_low": 75.99417339790726,
+              "ci95_high": 86.5145732484939
+            },
+            "pedestrian_average_wait": {
+              "mean": 12.622235854735175,
+              "std": 0.911250958397954,
+              "ci95_low": 12.29614888716617,
+              "ci95_high": 12.94832282230418
+            },
+            "bicycle_average_wait": {
+              "mean": 2.8760459676489085,
+              "std": 0.6550399864330309,
+              "ci95_low": 2.6416429189125727,
+              "ci95_high": 3.1104490163852443
+            },
+            "throughput": {
+              "mean": 1906.9333333333334,
+              "std": 9.916664251907363,
+              "ci95_low": 1903.38470060543,
+              "ci95_high": 1910.4819660612368
+            },
+            "completion_ratio": {
+              "mean": 0.8668401818716622,
+              "std": 0.020925904120998286,
+              "ci95_low": 0.859351943252465,
+              "ci95_high": 0.8743284204908595
+            },
+            "pedestrian_completion_ratio": {
+              "mean": 0.9983527903101606,
+              "std": 0.004281250559798454,
+              "ci95_low": 0.9968207644729509,
+              "ci95_high": 0.9998848161473702
+            },
+            "bicycle_completion_ratio": {
+              "mean": 0.9964519140989729,
+              "std": 0.013582587613114313,
+              "ci95_low": 0.9915914475439775,
+              "ci95_high": 1.0013123806539683
+            },
+            "conflicts": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            },
+            "overflows": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            },
+            "max_queue": {
+              "mean": 49.333333333333336,
+              "std": 10.004596644692304,
+              "ci95_low": 45.7532344027882,
+              "ci95_high": 52.91343226387847
+            },
+            "emergency_average_wait": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            },
+            "emergency_completion_ratio": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            }
+          }
+        },
+        "random": {
+          "runs": 30,
+          "metrics": {
+            "reward": {
+              "mean": -2639.3563333333323,
+              "std": 1101.7329240321526,
+              "ci95_low": -3033.6063968945086,
+              "ci95_high": -2245.106269772156
+            },
+            "vehicle_average_wait": {
+              "mean": 47.89361302036384,
+              "std": 9.91621833047183,
+              "ci95_low": 44.34513986339669,
+              "ci95_high": 51.442086177330985
+            },
+            "pedestrian_average_wait": {
+              "mean": 12.606121684445311,
+              "std": 0.8829466483920959,
+              "ci95_low": 12.290163284131994,
+              "ci95_high": 12.922080084758628
+            },
+            "bicycle_average_wait": {
+              "mean": 2.748948905841322,
+              "std": 0.6271572320938408,
+              "ci95_low": 2.5245235726027264,
+              "ci95_high": 2.9733742390799174
+            },
+            "throughput": {
+              "mean": 2029.9,
+              "std": 20.59017174318352,
+              "ci95_low": 2022.5319016692574,
+              "ci95_high": 2037.2680983307428
+            },
+            "completion_ratio": {
+              "mean": 0.931046943617514,
+              "std": 0.016629347855694167,
+              "ci95_low": 0.9250962079119002,
+              "ci95_high": 0.9369976793231277
+            },
+            "pedestrian_completion_ratio": {
+              "mean": 0.9982858463653149,
+              "std": 0.004811136287023946,
+              "ci95_low": 0.996564203355847,
+              "ci95_high": 1.000007489374783
+            },
+            "bicycle_completion_ratio": {
+              "mean": 0.9909685086155674,
+              "std": 0.02418903791690075,
+              "ci95_low": 0.982312572564097,
+              "ci95_high": 0.9996244446670378
+            },
+            "conflicts": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            },
+            "overflows": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            },
+            "max_queue": {
+              "mean": 44.46666666666667,
+              "std": 11.364595152864256,
+              "ci95_low": 40.39989852020342,
+              "ci95_high": 48.533434813129915
+            },
+            "emergency_average_wait": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            },
+            "emergency_completion_ratio": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            }
+          }
+        },
+        "shared_dqn": {
+          "runs": 30,
+          "metrics": {
+            "reward": {
+              "mean": -1044.8419999999999,
+              "std": 284.0148294683413,
+              "ci95_low": -1146.4754014603184,
+              "ci95_high": -943.2085985396815
+            },
+            "vehicle_average_wait": {
+              "mean": 32.842788619096716,
+              "std": 2.6444600501475573,
+              "ci95_low": 31.896480743463837,
+              "ci95_high": 33.78909649472959
+            },
+            "pedestrian_average_wait": {
+              "mean": 12.515878783491548,
+              "std": 0.9215911224176897,
+              "ci95_low": 12.186091635749028,
+              "ci95_high": 12.845665931234068
+            },
+            "bicycle_average_wait": {
+              "mean": 2.5375988679936046,
+              "std": 0.6234363856931918,
+              "ci95_low": 2.3145050225393518,
+              "ci95_high": 2.7606927134478574
+            },
+            "throughput": {
+              "mean": 2112.7,
+              "std": 43.790370536501946,
+              "ci95_low": 2097.02981715369,
+              "ci95_high": 2128.3701828463095
+            },
+            "completion_ratio": {
+              "mean": 0.9657161504521288,
+              "std": 0.006733678491572859,
+              "ci95_low": 0.9633065345503119,
+              "ci95_high": 0.9681257663539456
+            },
+            "pedestrian_completion_ratio": {
+              "mean": 0.99898779369904,
+              "std": 0.0030920518996915324,
+              "ci95_low": 0.997881317137074,
+              "ci95_high": 1.000094270261006
+            },
+            "bicycle_completion_ratio": {
+              "mean": 0.9979166666666667,
+              "std": 0.011410886614690958,
+              "ci95_low": 0.9938333333333333,
+              "ci95_high": 1.002
+            },
+            "conflicts": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            },
+            "overflows": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            },
+            "max_queue": {
+              "mean": 14.4,
+              "std": 3.222763859880479,
+              "ci95_low": 13.246748763801616,
+              "ci95_high": 15.553251236198385
+            },
+            "emergency_average_wait": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            },
+            "emergency_completion_ratio": {
+              "mean": 0.0,
+              "std": 0.0,
+              "ci95_low": 0.0,
+              "ci95_high": 0.0
+            }
+          }
+        }
+      },
+      "paired_dqn_comparisons": {
+        "fixed_time": {
+          "vehicle_average_wait": {
+            "mean_difference": 16.751285786005557,
+            "ci95_low": 15.81515169043678,
+            "ci95_high": 17.687419881574336,
+            "statistically_significant_95": true,
+            "improvement_percent": -104.1001947410256
+          },
+          "overflows": {
+            "mean_difference": 0.0,
+            "ci95_low": 0.0,
+            "ci95_high": 0.0,
+            "statistically_significant_95": false,
+            "improvement_percent": 0.0
+          },
+          "max_queue": {
+            "mean_difference": 2.3333333333333335,
+            "ci95_low": 1.0505399254912657,
+            "ci95_high": 3.6161267411754014,
+            "statistically_significant_95": true,
+            "improvement_percent": -19.33701657458564
+          }
+        },
+        "queue_heuristic": {
+          "vehicle_average_wait": {
+            "mean_difference": -48.41158470410387,
+            "ci95_low": -53.3761041994265,
+            "ci95_high": -43.44706520878125,
+            "statistically_significant_95": true,
+            "improvement_percent": 59.58028192715246
+          },
+          "overflows": {
+            "mean_difference": 0.0,
+            "ci95_low": 0.0,
+            "ci95_high": 0.0,
+            "statistically_significant_95": false,
+            "improvement_percent": 0.0
+          },
+          "max_queue": {
+            "mean_difference": -34.93333333333333,
+            "ci95_low": -39.00791162568904,
+            "ci95_high": -30.858755040977616,
+            "statistically_significant_95": true,
+            "improvement_percent": 70.81081081081082
+          }
+        }
+      }
+    }
+  }
+}

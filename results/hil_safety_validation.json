@@ -1,0 +1,17 @@
+{
+  "status": "passed",
+  "scope": "offline safety gateway; no connection to live signal hardware",
+  "checks": {
+    "reject_conflicting_raw_phase": true,
+    "reject_early_switch": true,
+    "reject_pedestrian_interval_switch": true,
+    "accept_safe_high_level_request": true,
+    "watchdog_native_fallback": true
+  },
+  "invariants": [
+    "RL cannot command individual lamp states",
+    "native controller owns yellow and all-red transitions",
+    "protected pedestrian intervals cannot be interrupted",
+    "stale heartbeat returns authority to native control"
+  ]
+}

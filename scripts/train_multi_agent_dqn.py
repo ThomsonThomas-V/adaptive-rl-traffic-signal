@@ -14,7 +14,8 @@ import numpy as np
 import torch
 from torch import nn
 
-from traffic_rl.envs.network_env import GridConfig, TrafficGridEnv
+from traffic_rl.envs.network_env import TrafficGridEnv
+from traffic_rl.envs.network_scenarios import SCENARIOS, grid_scenario
 
 
 class SharedQNetwork(nn.Module):
@@ -51,15 +52,28 @@ def main() -> None:
     parser.add_argument("--gamma", type=float, default=0.99)
     parser.add_argument("--batch-size", type=int, default=128)
     parser.add_argument("--buffer-size", type=int, default=100_000)
+    parser.add_argument("--torch-threads", type=int, default=1)
     parser.add_argument("--output", type=Path, default=Path("models/grid_shared_dqn.pt"))
     parser.add_argument("--metrics-output", type=Path, default=None)
+    parser.add_argument(
+        "--scenario",
+        choices=(*SCENARIOS, "domain_randomized"),
+        default="domain_randomized",
+    )
     args = parser.parse_args()
 
     random.seed(args.seed)
     np.random.seed(args.seed)
     torch.manual_seed(args.seed)
+    torch.set_num_threads(args.torch_threads)
     rng = np.random.default_rng(args.seed)
-    env = TrafficGridEnv(GridConfig())
+    training_scenarios = tuple(SCENARIOS)
+    active_scenario = (
+        str(rng.choice(training_scenarios))
+        if args.scenario == "domain_randomized"
+        else args.scenario
+    )
+    env = TrafficGridEnv(grid_scenario(active_scenario))
     env.reset(seed=args.seed)
     observation_size = next(iter(env.agent_observations().values())).shape[0]
     policy, target = SharedQNetwork(observation_size), SharedQNetwork(observation_size)
@@ -114,6 +128,10 @@ def main() -> None:
             episode_returns.append(episode_return)
             if step % 10_000 < env.config.episode_length:
                 print(f"step={step} return={episode_return:.1f} epsilon={epsilon:.3f}")
+            if args.scenario == "domain_randomized":
+                active_scenario = str(rng.choice(training_scenarios))
+                env.close()
+                env = TrafficGridEnv(grid_scenario(active_scenario))
             env.reset(seed=args.seed + step)
             episode_return = 0.0
 
@@ -126,6 +144,7 @@ def main() -> None:
             "observation_size": observation_size,
             "actions": 3,
             "agents": list(env.NODE_NAMES),
+            "training_scenario": args.scenario,
         },
         args.output,
     )
@@ -145,6 +164,7 @@ def main() -> None:
                 else episode_return,
                 "mean_training_loss": float(np.mean(losses[-1000:])) if losses else None,
                 "safety_conflicts": env.conflicts,
+                "training_scenario": args.scenario,
             },
             indent=2,
         )

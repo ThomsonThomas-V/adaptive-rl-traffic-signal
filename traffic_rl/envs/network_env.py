@@ -32,6 +32,21 @@ class GridConfig:
     minimum_green_time: int = 5
     yellow_duration: int = 3
     max_queue_length: int = 80
+    demand_profile: str = "balanced"
+    emergency_rate: float = 0.0
+    incident_node: int = -1
+    incident_approach: int = -1
+    incident_start: int = 0
+    incident_end: int = 0
+    sensor_failure_node: int = -1
+    sensor_failure_start: int = 0
+    sensor_failure_end: int = 0
+    spillback_threshold: float = 0.75
+    queue_penalty: float = 0.045
+    vulnerable_penalty: float = 0.025
+    spillback_penalty: float = 0.16
+    emergency_penalty: float = 0.20
+    switch_penalty: float = 0.04
 
 
 class TrafficGridEnv(gym.Env[NDArray[np.float32], NDArray[np.int64]]):
@@ -58,6 +73,7 @@ class TrafficGridEnv(gym.Env[NDArray[np.float32], NDArray[np.int64]]):
         self.queues = np.zeros((4, 4), dtype=np.int64)
         self.pedestrians = np.zeros(4, dtype=np.int64)
         self.bicycles = np.zeros(4, dtype=np.int64)
+        self.emergencies = np.zeros((4, 4), dtype=np.int64)
         self.phases = np.zeros(4, dtype=np.int64)
         self.phase_age = np.zeros(4, dtype=np.int64)
         self.yellow = np.zeros(4, dtype=np.int64)
@@ -77,6 +93,10 @@ class TrafficGridEnv(gym.Env[NDArray[np.float32], NDArray[np.int64]]):
         self.pedestrians_served = 0
         self.bicycles_served = 0
         self.conflicts = 0
+        self.overflows = 0
+        self.emergency_delay = 0.0
+        self.emergencies_arrived = 0
+        self.emergencies_served = 0
 
     def reset(
         self, *, seed: int | None = None, options: dict[str, Any] | None = None
@@ -88,6 +108,7 @@ class TrafficGridEnv(gym.Env[NDArray[np.float32], NDArray[np.int64]]):
             self.queues,
             self.pedestrians,
             self.bicycles,
+            self.emergencies,
             self.phases,
             self.phase_age,
             self.yellow,
@@ -98,8 +119,10 @@ class TrafficGridEnv(gym.Env[NDArray[np.float32], NDArray[np.int64]]):
         self.timestep = self.arrived = self.processed = self.switches = 0
         self.pedestrians_arrived = self.bicycles_arrived = 0
         self.pedestrians_served = self.bicycles_served = self.conflicts = 0
+        self.overflows = self.emergencies_arrived = self.emergencies_served = 0
         self.total_delay = self.vehicle_delay = 0.0
         self.pedestrian_delay = self.bicycle_delay = 0.0
+        self.emergency_delay = 0.0
         return self._observation(), self._info(False)
 
     def step(
@@ -109,18 +132,30 @@ class TrafficGridEnv(gym.Env[NDArray[np.float32], NDArray[np.int64]]):
         if not self.action_space.contains(action):
             raise ValueError("Grid action must contain four values in {0, 1, 2}")
         safety_mode = self.safety_mode()
+        switches_before = self.switches
         if safety_mode == "vehicle":
             self._apply_actions(action)
         self._boundary_arrivals()
         self.vehicle_delay += float(self.queues.sum())
         self.pedestrian_delay += float(self.pedestrians.sum())
         self.bicycle_delay += float(self.bicycles.sum())
+        self.emergency_delay += float(self.emergencies.sum())
         self.total_delay = self.vehicle_delay + self.pedestrian_delay + self.bicycle_delay
         passed, pedestrians_served, bicycles_served = self._advance_network(safety_mode)
         vulnerable_wait = int(self.pedestrians.sum() + self.bicycles.sum())
+        queue_total = float(self.queues.sum())
+        spillback = float(
+            np.maximum(
+                self.queues - self.config.spillback_threshold * self.config.max_queue_length,
+                0,
+            ).sum()
+        )
         reward = (
-            -0.045 * float(self.queues.sum())
-            - 0.025 * vulnerable_wait
+            -self.config.queue_penalty * queue_total
+            -self.config.vulnerable_penalty * vulnerable_wait
+            -self.config.spillback_penalty * spillback
+            -self.config.emergency_penalty * float(self.emergencies.sum())
+            -self.config.switch_penalty * (self.switches - switches_before)
             + passed
             + 0.25 * (pedestrians_served + bicycles_served)
         )
@@ -143,17 +178,44 @@ class TrafficGridEnv(gym.Env[NDArray[np.float32], NDArray[np.int64]]):
         # (node, approach) pairs on the outside edge of the district.
         boundaries = ((0, 0), (1, 0), (2, 1), (3, 1), (0, 3), (2, 3), (1, 2), (3, 2))
         for node, approach in boundaries:
-            count = int(self._rng.poisson(self.config.boundary_arrival_rate))
-            self.queues[node, approach] = min(
-                self.config.max_queue_length, self.queues[node, approach] + count
-            )
-            self.arrived += count
+            rate = self.config.boundary_arrival_rate * self._demand_multiplier(approach)
+            normal = int(self._rng.poisson(rate))
+            emergency = int(self._rng.poisson(self.config.emergency_rate))
+            demanded = normal + emergency
+            room = max(self.config.max_queue_length - int(self.queues[node, approach]), 0)
+            accepted_emergency = min(emergency, room)
+            accepted = min(demanded, room)
+            self.queues[node, approach] += accepted
+            self.emergencies[node, approach] += accepted_emergency
+            self.arrived += demanded
+            self.emergencies_arrived += emergency
+            self.overflows += demanded - accepted
         pedestrian_arrivals = self._rng.poisson(self.config.pedestrian_rate, 4)
         bicycle_arrivals = self._rng.poisson(self.config.bicycle_rate, 4)
         self.pedestrians += pedestrian_arrivals
         self.bicycles += bicycle_arrivals
         self.pedestrians_arrived += int(pedestrian_arrivals.sum())
         self.bicycles_arrived += int(bicycle_arrivals.sum())
+
+    def _demand_multiplier(self, approach: int) -> float:
+        profile = self.config.demand_profile
+        progress = self.timestep / max(self.config.episode_length - 1, 1)
+        if profile == "rush_hour":
+            return 0.8 + 1.6 * float(np.sin(np.pi * progress))
+        if profile == "unbalanced":
+            return 1.8 if approach in (2, 3) else 0.65
+        if profile == "road_closure":
+            return 1.15
+        if profile == "emergency_surge":
+            return 1.2
+        if profile == "calibrated_lemgo":
+            # Five-minute 15:00–15:20 OWL322 totals, normalized around their mean.
+            knots = np.asarray((0.867, 1.123, 0.955, 1.055))
+            position = progress * (len(knots) - 1)
+            lower = min(int(position), len(knots) - 1)
+            upper = min(lower + 1, len(knots) - 1)
+            return float(knots[lower] + (knots[upper] - knots[lower]) * (position - lower))
+        return 1.0
 
     def safety_mode(self, timestep: int | None = None) -> str:
         """Return ``vehicle``, ``clearance``, or protected ``pedestrian`` mode."""
@@ -169,7 +231,7 @@ class TrafficGridEnv(gym.Env[NDArray[np.float32], NDArray[np.int64]]):
         return "vehicle"
 
     def _advance_network(self, safety_mode: str) -> tuple[int, int, int]:
-        transfers: list[tuple[int, int]] = []
+        transfers: list[tuple[int, int, bool]] = []
         processed = 0
         pedestrians_served = 0
         bicycles_served = 0
@@ -191,32 +253,47 @@ class TrafficGridEnv(gym.Env[NDArray[np.float32], NDArray[np.int64]]):
             active = (0, 1) if self.phases[node] == 0 else (2, 3)
             self.phase_age[node] += 1
             for approach in active:
+                if self._incident_active(node, approach):
+                    continue
                 self._credits[node, approach] += self.config.service_rate
                 capacity = int(self._credits[node, approach])
                 departing = min(capacity, int(self.queues[node, approach]))
                 self.queues[node, approach] -= departing
                 self._credits[node, approach] -= departing
-                for _ in range(departing):
+                emergency_departing = min(departing, int(self.emergencies[node, approach]))
+                self.emergencies[node, approach] -= emergency_departing
+                for departure_index in range(departing):
+                    is_emergency = departure_index < emergency_departing
                     if self._rng.random() < self.config.left_turn_ratio + self.config.right_turn_ratio:
                         processed += 1
+                        self.emergencies_served += int(is_emergency)
                         continue
                     downstream = self._downstream(node, approach)
                     if downstream is None:
                         processed += 1
+                        self.emergencies_served += int(is_emergency)
                     else:
-                        transfers.append(downstream)
+                        transfers.append((*downstream, is_emergency))
             served = min(self.config.bicycle_service_rate, int(self.bicycles[node]))
             self.bicycles[node] -= served
             bicycles_served += served
-        for node, approach in transfers:
+        for node, approach, is_emergency in transfers:
             if self.queues[node, approach] < self.config.max_queue_length:
                 self.queues[node, approach] += 1
+                self.emergencies[node, approach] += int(is_emergency)
             else:
-                processed += 1
+                self.overflows += 1
         self.processed += processed
         self.pedestrians_served += pedestrians_served
         self.bicycles_served += bicycles_served
         return processed, pedestrians_served, bicycles_served
+
+    def _incident_active(self, node: int, approach: int) -> bool:
+        return (
+            node == self.config.incident_node
+            and approach == self.config.incident_approach
+            and self.config.incident_start <= self.timestep < self.config.incident_end
+        )
 
     @staticmethod
     def _downstream(node: int, approach: int) -> tuple[int, int] | None:
@@ -239,15 +316,20 @@ class TrafficGridEnv(gym.Env[NDArray[np.float32], NDArray[np.int64]]):
             row, column = divmod(node, 2)
             horizontal = sum(self.queues[row * 2 + c, [2, 3]].sum() for c in range(2))
             vertical = sum(self.queues[r * 2 + column, [0, 1]].sum() for r in range(2))
-            features.extend(np.clip(self.queues[node] / self.config.max_queue_length, 0, 1))
+            sensor_failed = (
+                node == self.config.sensor_failure_node
+                and self.config.sensor_failure_start <= self.timestep < self.config.sensor_failure_end
+            )
+            observed_queues = np.zeros(4) if sensor_failed else self.queues[node]
+            features.extend(np.clip(observed_queues / self.config.max_queue_length, 0, 1))
             features.extend(
                 (
                     min(self.pedestrians[node] / 20, 1),
                     min(self.bicycles[node] / 20, 1),
                     float(self.phases[node]),
                     min(self.phase_age[node] / 90, 1),
-                    min(horizontal / (4 * self.config.max_queue_length), 1),
-                    min(vertical / (4 * self.config.max_queue_length), 1),
+                    0.0 if sensor_failed else min(horizontal / (4 * self.config.max_queue_length), 1),
+                    0.0 if sensor_failed else min(vertical / (4 * self.config.max_queue_length), 1),
                     {"vehicle": 0.0, "clearance": 0.5, "pedestrian": 1.0}[
                         self.safety_mode()
                     ],
@@ -276,6 +358,9 @@ class TrafficGridEnv(gym.Env[NDArray[np.float32], NDArray[np.int64]]):
             "pedestrians_served": self.pedestrians_served,
             "bicycles_served": self.bicycles_served,
             "conflicts": self.conflicts,
+            "overflows": self.overflows,
+            "emergencies_arrived": self.emergencies_arrived,
+            "emergencies_served": self.emergencies_served,
         }
         if final:
             info.update(
@@ -290,6 +375,11 @@ class TrafficGridEnv(gym.Env[NDArray[np.float32], NDArray[np.int64]]):
                 / max(self.pedestrians_arrived, 1),
                 bicycle_completion_ratio=self.bicycles_served
                 / max(self.bicycles_arrived, 1),
+                emergency_average_wait=self.emergency_delay
+                / max(self.emergencies_arrived, 1),
+                emergency_completion_ratio=self.emergencies_served
+                / max(self.emergencies_arrived, 1),
+                max_queue=float(self.queues.max()),
             )
         return info
 

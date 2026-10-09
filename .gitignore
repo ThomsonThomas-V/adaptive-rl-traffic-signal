@@ -13,5 +13,7 @@ models/**/checkpoints/
 *.pt
 *.pth
 !models/grid_shared_dqn_seed_*.pt
+!models/grid_shared_dqn_300k_seed_*.pt
+*.egg-info/
 frontend/site-archive.tar.gz
 frontend/.sites-source-git/

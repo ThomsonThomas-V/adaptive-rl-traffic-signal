@@ -1,50 +1,54 @@
-# Project handoff — 7 October 2026
+# Project handoff — 9 October 2026
 
-## Completed
+## All six requested tasks are complete
 
-- Built the original Gymnasium traffic environment, baselines, Stable-Baselines3 DQN workflow, experiment tooling, Pygame renderer, and responsive frontend.
-- Added a cooperative 2×2 environment with four agents, turning traffic, bicycles, pedestrians, network transfer, centralized observations, and local observations.
-- Added an enforced 30-second multimodal safety cycle. Pedestrians cross only in their protected phase; vehicles and bicycles stop during pedestrian and clearance intervals; invalid actions in protected intervals are ignored.
-- Added parameter-sharing multi-agent DQN training and saved three independently initialized 30,000-step policies.
-- Added matched-seed evaluation against fixed-time, queue-heuristic, and random controllers.
-- Added a real central-Lemgo SUMO/TraCI scenario with 9 signal controllers, 48 controlled lanes, protected pedestrian-only routes, and a safe policy adapter that preserves native yellow/all-red transitions.
-- Added native-versus-DQN SUMO evaluation across three matched seeds.
-- Added measured results and honest trade-offs to the browser dashboard and README.
-- Published the frontend privately at <https://signal-lab-traffic-control.thomsonthomasoffice.chatgpt.site>.
+1. Trained five independently initialized, domain-randomized shared DQN policies for 300,000 steps each.
+2. Corrected the SUMO phase classifier and selected a 15-second decision interval with a 20-second minimum green on separate validation seeds.
+3. Added seven grid scenarios: balanced, rush hour, unbalanced demand, road closure, emergency surge, sensor failure, and a Lemgo-calibrated proxy.
+4. Grounded the Lemgo proxy in the public Fraunhofer OWL322 demand files; extraction and mapping assumptions are recorded in `networks/lemgo/calibration.json`.
+5. Added held-out paired statistics with 95% confidence intervals and publication-ready plots.
+6. Added an offline hardware-in-the-loop safety gateway with protected intervals, minimum-green enforcement, invalid-command rejection, and heartbeat fallback.
+
+The browser dashboard was updated with the final evidence and remains available privately at <https://signal-lab-traffic-control.thomsonthomasoffice.chatgpt.site>.
 
 ## Verification performed
 
-- `pytest`: **23 passed**.
+- Unit and integration tests: **28 passed**.
 - Python source compilation: passed.
-- Three grid policies trained for 30,000 steps each and saved under `models/`.
-- Grid evaluation: 10 held-out seeds × 1,200 seconds × all baselines; output saved in `results/multi_agent_evaluation.json`.
-- SUMO 1.27.1 policy evaluation: 3 seeds × 900 seconds × two controllers; output saved in `results/sumo_policy_evaluation.json`.
-- Grid and SUMO evaluations both recorded **zero safety conflicts/collisions**.
-- Frontend results panel shows the exact committed benchmark aggregates and clearly labels the work preliminary.
+- Frontend JavaScript syntax check: passed.
+- Grid training: five seeds × 300,000 steps.
+- Model selection: ten validation seeds (5000–5009), separate from final evaluation.
+- Grid evaluation: 30 held-out seeds (10000–10029) × 1,200 seconds × seven scenarios × four controllers.
+- SUMO timing selection: seeds 40–41 only.
+- SUMO final evaluation: five held-out seeds (42–46) × 900 seconds × two controllers.
+- Safety: zero grid conflicts and zero SUMO collisions in the final evaluations; all five offline HIL checks passed.
 
-## Measured results
+## Final measured results
 
-| Evaluation | Native / fixed | Shared DQN | Interpretation |
+| Evaluation | Reference | Shared DQN | Interpretation |
 |---|---:|---:|---|
-| Grid mean vehicle wait | 15.78 s | 9.35 s | 40.7% lower than fixed |
-| Grid heuristic comparison | 12.15 s | 9.35 s | 23.0% lower than heuristic |
-| SUMO waiting load | 1,191.80 | 1,089.01 | 8.6% lower |
-| SUMO mean queue | 20.86 | 22.15 | 6.2% higher |
-| SUMO mean arrivals | 230.00 | 232.33 | Slightly higher |
+| Balanced grid wait vs fixed | 15.90 s | **10.99 s** | 30.9% lower, significant at 95% |
+| Balanced grid wait vs heuristic | 11.99 s | **10.99 s** | 8.3% lower, significant at 95% |
+| SUMO waiting load | 1,174.55 | **1,102.53** | 6.1% lower, significant at 95% |
+| SUMO peak queue | 44.8 | **41.4** | 7.6% lower, significant at 95% |
+| SUMO mean queue | 20.72 | **20.66** | 0.3% lower, not significant |
+| SUMO mean arrivals | 230.2 | 229.0 | Difference not significant |
 
-These are pipeline-validation results from short training, not a converged policy or field-deployment claim. The SUMO waiting metric is aggregate controlled-lane waiting load per simulation step.
+The DQN beat the queue heuristic on waiting time in all seven grid scenarios. Fixed timing remained better in several severe-disruption cases, so the evidence does not establish universal superiority.
 
 ## Main commands
 
 ```powershell
 pytest -q
-python scripts/train_multi_agent_dqn.py --timesteps 30000 --seed 0
-python scripts/evaluate_multi_agent.py --model-glob "models/grid_shared_dqn_seed_*.pt"
-python scripts/run_sumo_scenario.py --steps 900 --seed 42
-python scripts/run_sumo_policy.py --seeds 42,43,44 --steps 900
+python scripts/train_multi_agent_dqn.py --timesteps 300000 --seed 0 --scenario domain_randomized
+python scripts/select_multi_agent_model.py --model-glob "models/grid_shared_dqn_300k_seed_*.pt"
+python scripts/evaluate_multi_agent.py --models models/grid_shared_dqn_300k_seed_1.pt --episodes 30
+python scripts/run_sumo_policy.py --model models/grid_shared_dqn_300k_seed_1.pt --seeds 42 43 44 45 46 --steps 900 --decision-interval 15 --minimum-green 20
+python scripts/run_hil_validation.py
+python scripts/plot_multi_agent_results.py
 python -m http.server 4173 --directory frontend/dist
 ```
 
-## Recommended next research stage
+## Deployment boundary
 
-Train at least 300,000–500,000 steps per seed, add more held-out seeds and demand regimes, tune only on a validation set, then test the frozen policy against detector-calibrated traffic. Before any real-world use, obtain traffic-engineering safety review and use a staged simulation/hardware-in-the-loop deployment process.
+The HIL gateway is an offline safety contract only. No physical controller or public-road signal is connected, authorized, or certified. Any next deployment stage requires local detector calibration, independent traffic-engineering review, road-authority approval, vendor-specific controller integration, and controlled testing before a public-road trial.

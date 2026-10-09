@@ -55,8 +55,8 @@ The browser dashboard can switch between the detailed single junction, the coope
 `scripts/train_multi_agent_dqn.py` implements cooperative parameter-sharing DQN: agents A–D use the same neural policy, contribute local transitions to one replay buffer, and learn from a shared network reward. This exploits the intersections' common observation/action structure while still producing four simultaneous decisions.
 
 ```powershell
-python scripts/train_multi_agent_dqn.py --timesteps 30000 --seed 0
-python scripts/evaluate_multi_agent.py --model-glob "models/grid_shared_dqn_seed_*.pt"
+python scripts/train_multi_agent_dqn.py --timesteps 300000 --seed 0 --scenario domain_randomized
+python scripts/evaluate_multi_agent.py --models models/grid_shared_dqn_300k_seed_1.pt --episodes 30
 ```
 
 ### Verified SUMO integration
@@ -81,15 +81,21 @@ python -m pip install eclipse-sumo
 python scripts/run_sumo_scenario.py --steps 900
 ```
 
-The checked run on SUMO 1.27.1 completed 900 TraCI steps with 426 departures, 232 arrivals, and zero collisions. Its machine-readable output is saved in `results/sumo_lemgo_verification.json`.
+The checked native run completed 900 TraCI steps with 426 departures, 232 arrivals, and zero collisions. Its machine-readable output is saved in `results/sumo_lemgo_verification.json`.
+
+The `calibrated_lemgo` grid profile is grounded in Fraunhofer IOSB-INA's public [LemgoRL OWL322 model](https://github.com/RL-INA/LemgoRL) and the associated [German government data-catalog record](https://data.gov.de/suche/daten/simulationsmodell-ki-schnittstelle-und-verkehrszahldaten-einer-kreuzung-in-der-alten-hansestadt). It uses the published 15:00–15:20 five-minute motorized and pedestrian rates. `networks/lemgo/calibration.json` records the extracted values and scaling assumptions. This is explicitly a calibrated proxy: OWL322 is one intersection, while this project's four-node grid and central-Lemgo OSM network have different geometry.
 
 Run the shared policy against SUMO's native program on matched seeds:
 
 ```powershell
-python scripts/run_sumo_policy.py --seeds 42,43,44 --steps 900
+python scripts/run_sumo_policy.py --model models/grid_shared_dqn_300k_seed_1.pt --seeds 42 43 44 45 46 --steps 900 --decision-interval 15 --minimum-green 20
 ```
 
 The policy can request an earlier transition only after a 20-second minimum green. SUMO still performs the yellow/all-red stages encoded in the native program, so the adapter never jumps directly from one conflicting green to another.
+
+### Offline hardware-in-the-loop safety contract
+
+`traffic_rl.safety.SafetyGateway` is a dry-run integration boundary for future controller hardware. The RL policy can request only a high-level NS/EW transition; it cannot command individual lamps. The gateway rejects invalid phases, minimum-green violations, and requests during protected pedestrian intervals. A stale heartbeat immediately restores native-controller authority. Run `python scripts/run_hil_validation.py`; the committed result in `results/hil_safety_validation.json` passes all five checks. No live road hardware is connected or authorized by this project.
 
 ## Reward function
 
@@ -116,25 +122,25 @@ The DQN uses an MLP policy, replay buffer, target network, epsilon-greedy explor
 
 ## Evaluation and results
 
-`compare_agents.py` evaluates the original single-junction policies. `evaluate_multi_agent.py` performs matched-seed evaluation of the cooperative grid. Three independently initialized shared DQN models were trained for 30,000 steps and evaluated on ten held-out seeds (10000–10009), 1,200 seconds each:
+`compare_agents.py` evaluates the original single-junction policies. `evaluate_multi_agent.py` performs matched-seed evaluation of the cooperative grid with 95% confidence intervals. Five independently initialized policies were trained for 300,000 steps each using domain randomization. Model selection used validation seeds 5000–5009 and an equal-weight score of waiting time, overflow, and maximum queue versus the heuristic. Seed 1 was frozen before final evaluation on 30 unseen seeds (10000–10029), 1,200 seconds each.
 
 | Grid controller | Mean vehicle wait | Mean throughput | Completion ratio | Conflicts |
 |---|---:|---:|---:|---:|
-| Shared DQN | **9.35 s** | 1,517.47 | 98.73% | 0 |
-| Queue heuristic | 12.15 s | 1,512.70 | 98.84% | 0 |
-| Fixed time | 15.78 s | 1,517.30 | 98.08% | 0 |
-| Random | 13.02 s | 1,513.40 | 98.62% | 0 |
+| Shared DQN | **10.99 s** | 1,520.73 | 98.73% | 0 |
+| Queue heuristic | 11.99 s | 1,519.23 | 98.81% | 0 |
+| Fixed time | 15.90 s | 1,512.93 | 98.08% | 0 |
+| Random | 13.08 s | 1,523.80 | 98.65% | 0 |
 
-On this preliminary benchmark, DQN reduced mean vehicle wait by 40.7% versus fixed time and 23.0% versus the queue heuristic. The complete per-policy aggregates are committed in `results/multi_agent_evaluation.json`.
+On balanced traffic, DQN reduced mean vehicle wait by 30.9% versus fixed time and 8.3% versus the queue heuristic; both paired 95% intervals exclude zero. Across all seven scenarios, it beat the heuristic on waiting time, including rush hour, imbalance, road closure, emergency surge, sensor failure, and the Lemgo-calibrated proxy. Fixed timing remained better in several heavy-disruption cases, so the result does not support a universal superiority claim. Full results are in `results/multi_agent_evaluation_300k.json`; selection evidence is in `results/model_selection_300k.json`.
 
-The Lemgo SUMO comparison covers three seeds and 900 seconds per seed:
+The final Lemgo SUMO comparison covers five untouched seeds and 900 seconds per seed. Safe timing was selected separately on seeds 40–41:
 
 | SUMO controller | Mean controlled-lane waiting load | Mean queue | Mean arrivals | Collisions |
 |---|---:|---:|---:|---:|
-| Native signal program | 1,191.80 | **20.86** | 230.00 | 0 |
-| Shared DQN adapter | **1,089.01** | 22.15 | **232.33** | 0 |
+| Native signal program | 1,174.55 | 20.72 | 230.20 | 0 |
+| Shared DQN adapter | **1,102.53** | **20.66** | 229.00 | 0 |
 
-The DQN adapter lowered aggregate waiting load by 8.6% and slightly increased arrivals, but mean queue rose by 6.2%. This mixed result is reported deliberately: the 30,000-step models validate the complete pipeline, but they are not a claim of convergence or field readiness. Full run data is in `results/sumo_policy_evaluation.json`.
+The corrected adapter infers NS/EW movement from each signal's actual green controlled links instead of assuming a phase-index mapping. It lowered aggregate waiting load by 6.1%, peak queue by 7.6%, and mean queue by 0.3%. The waiting-load and peak-queue reductions are statistically significant at 95%; the tiny mean-queue and throughput differences are not. Full paired statistics are in `results/sumo_policy_evaluation_300k.json`.
 
 ## Installation
 
@@ -224,6 +230,7 @@ traffic_rl/
   envs/             configuration, scenarios, Gymnasium environment
   controllers/      fixed, heuristic, and random policies
   evaluation/       seeded evaluation, aggregation, and plots
+  safety/           fail-safe hardware-in-the-loop gateway
   visualization/    lazy-loaded Pygame renderer
 scripts/            train, evaluate, compare, experiment, plot, visualize
 tests/              API, dynamics, reproducibility, controller, metric tests
@@ -237,21 +244,24 @@ frontend/dist/      interactive browser dashboard
 
 1. Validate the simulator with `pytest` and `check_env`.
 2. Compare baselines before training.
-3. Train DQN under medium demand with seeds `0,1,2` (preferably `0..4`).
-4. Select hyperparameters only from training/validation results.
-5. Freeze policies and evaluate on held-out seeds in all five scenarios.
-6. Report mean ± standard deviation and operational metrics.
-7. Calculate percentage improvement only from saved CSVs, for example `(fixed_wait - dqn_wait) / fixed_wait × 100`.
+3. Train five parameter-sharing policies for 300,000 steps with domain-randomized demand and incidents.
+4. Select the final model only on validation seeds 5000–5009.
+5. Freeze the policy and evaluate it on 30 held-out grid seeds in all seven scenarios.
+6. Select safe SUMO timing separately, then evaluate on five untouched SUMO seeds.
+7. Report 95% paired confidence intervals and operational metrics, not reward alone.
+8. Run the offline HIL safety contract before considering any controller connection.
+
+Generate the final figures with `python scripts/plot_multi_agent_results.py`. The committed charts in `results/plots_300k/` cover waiting time, overflow, maximum queue, and the SUMO comparison.
 
 Sanity checks represented in the tests include zero demand, single-axis arrivals, queue non-negativity, green-only discharge, deterministic demand, signal safety, and exact episode truncation. Additional experiment-level checks should confirm balanced traffic is not permanently starved and adaptive policies allocate more green to the busy axis.
 
 ## Limitations
 
-The original `TrafficLightEnv` remains one isolated intersection with straight-through vehicles, one lane per approach, aggregate queues, simplified saturation flow, no turn conflicts, no pedestrians, no emergency priority, and no spillback. `TrafficGridEnv` adds four neighboring intersections, turning proportions, bicycles, protected pedestrian service, and clearance intervals, but it is still a queue-level abstraction rather than a calibrated microscopic model. The Lemgo SUMO scenario improves geometric and road-user realism; three short evaluation seeds are still not field calibration. The SUMO metric named waiting load is a per-step aggregate over controlled lanes, not a per-person travel-time average. Results do not transfer directly to a real junction without detector data, calibration, safety review, and controlled deployment testing.
+The original `TrafficLightEnv` remains one isolated intersection with straight-through vehicles, one lane per approach, aggregate queues, simplified saturation flow, no turn conflicts, no pedestrians, no emergency priority, and no spillback. `TrafficGridEnv` adds four neighboring intersections, turning proportions, bicycles, protected pedestrian service, spillback penalties, emergency demand, road closures, sensor failures, and clearance intervals, but it is still a queue-level abstraction rather than a calibrated microscopic model. The Lemgo profile uses published OWL322 demand as a proxy; it is not detector calibration of this project's different four-node grid or OSM network. Five 900-second SUMO seeds are research evidence, not a field trial. The SUMO waiting-load metric is a per-step aggregate over controlled lanes, not a per-person travel-time average. Results do not transfer directly to a real junction without local detector data, calibration, independent traffic-engineering safety review, authority approval, controller-vendor integration, and staged closed-course testing.
 
 ## Future work
 
-Promising extensions include longer training, PPO and Double DQN, prioritized replay, domain randomization, emergency priority, traffic forecasting, real detector calibration, and graph neural networks. SUMO remains optional for the core unit-test suite.
+Promising extensions include PPO and Double DQN, prioritized replay, traffic forecasting, real detector calibration, graph neural networks, and closed-loop tests with an approved traffic-controller emulator. SUMO remains optional for the core unit-test suite. The offline HIL gateway is intentionally fail-safe scaffolding and must not be treated as authorization or certification for a live road installation.
 
 ## What I learned
 

@@ -1,0 +1,112 @@
+{
+  "status": "selected_before_final_test",
+  "criterion": "equal-weight mean of wait, overflow, and maximum-queue ratios versus queue heuristic; lower is better",
+  "selected_model": "models\\grid_shared_dqn_300k_seed_1.pt",
+  "candidates": [
+    {
+      "model": "models\\grid_shared_dqn_300k_seed_1.pt",
+      "validation_seeds": [
+        5000,
+        5001,
+        5002,
+        5003,
+        5004,
+        5005,
+        5006,
+        5007,
+        5008,
+        5009
+      ],
+      "components": {
+        "waiting_ratio": 0.6223741287941059,
+        "overflow_ratio": 0.9725542834310347,
+        "max_queue_ratio": 0.6176129201527588
+      },
+      "score": 0.7375137774592998
+    },
+    {
+      "model": "models\\grid_shared_dqn_300k_seed_2.pt",
+      "validation_seeds": [
+        5000,
+        5001,
+        5002,
+        5003,
+        5004,
+        5005,
+        5006,
+        5007,
+        5008,
+        5009
+      ],
+      "components": {
+        "waiting_ratio": 0.7488283574637762,
+        "overflow_ratio": 0.8523123779695477,
+        "max_queue_ratio": 0.8091380437080964
+      },
+      "score": 0.8034262597138069
+    },
+    {
+      "model": "models\\grid_shared_dqn_300k_seed_3.pt",
+      "validation_seeds": [
+        5000,
+        5001,
+        5002,
+        5003,
+        5004,
+        5005,
+        5006,
+        5007,
+        5008,
+        5009
+      ],
+      "components": {
+        "waiting_ratio": 0.9015415618726007,
+        "overflow_ratio": 0.9056995560537194,
+        "max_queue_ratio": 0.949650332103406
+      },
+      "score": 0.9189638166765753
+    },
+    {
+      "model": "models\\grid_shared_dqn_300k_seed_0.pt",
+      "validation_seeds": [
+        5000,
+        5001,
+        5002,
+        5003,
+        5004,
+        5005,
+        5006,
+        5007,
+        5008,
+        5009
+      ],
+      "components": {
+        "waiting_ratio": 0.6718282214139375,
+        "overflow_ratio": 1.6432897689784198,
+        "max_queue_ratio": 0.6700112830327685
+      },
+      "score": 0.9950430911417086
+    },
+    {
+      "model": "models\\grid_shared_dqn_300k_seed_4.pt",
+      "validation_seeds": [
+        5000,
+        5001,
+        5002,
+        5003,
+        5004,
+        5005,
+        5006,
+        5007,
+        5008,
+        5009
+      ],
+      "components": {
+        "waiting_ratio": 0.6542099586384458,
+        "overflow_ratio": 2.703674938839428,
+        "max_queue_ratio": 0.7270743450470076
+      },
+      "score": 1.3616530808416272
+    }
+  ]
+}

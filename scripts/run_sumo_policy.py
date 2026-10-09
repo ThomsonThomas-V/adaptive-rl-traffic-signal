@@ -23,6 +23,13 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--steps", type=int, default=900)
     parser.add_argument("--seeds", type=int, nargs="+", default=[42])
     parser.add_argument("--decision-interval", type=int, default=10)
+    parser.add_argument("--minimum-green", type=int, default=20)
+    parser.add_argument(
+        "--controllers",
+        nargs="+",
+        choices=("native", "shared_dqn"),
+        default=["native", "shared_dqn"],
+    )
     parser.add_argument(
         "--output", type=Path, default=ROOT / "results" / "sumo_policy_evaluation.json"
     )
@@ -45,6 +52,23 @@ def lane_orientation(traci: object, lane_id: str) -> str:
     return "vertical" if abs(y1 - y0) >= abs(x1 - x0) else "horizontal"
 
 
+def current_phase_class(adapter: SumoAdapter, signal_id: str) -> int | None:
+    """Infer NS/EW green from the actual controlled links, not phase index."""
+    traci = adapter._require_started()
+    state = str(traci.trafficlight.getRedYellowGreenState(signal_id))
+    links = traci.trafficlight.getControlledLinks(signal_id)
+    counts = {"vertical": 0, "horizontal": 0}
+    for state_value, controlled in zip(state, links, strict=False):
+        if state_value not in "Gg":
+            continue
+        for link in controlled:
+            if link:
+                counts[lane_orientation(traci, str(link[0]))] += 1
+    if not any(counts.values()):
+        return None
+    return 0 if counts["vertical"] >= counts["horizontal"] else 1
+
+
 def signal_observation(adapter: SumoAdapter, signal_id: str, phase_age: int) -> np.ndarray:
     traci = adapter._require_started()
     lanes = adapter.controlled_lanes(signal_id)
@@ -56,7 +80,8 @@ def signal_observation(adapter: SumoAdapter, signal_id: str, phase_age: int) -> 
 
     ns, ew = halted(vertical), halted(horizontal)
     state = str(traci.trafficlight.getRedYellowGreenState(signal_id))
-    phase = float(traci.trafficlight.getPhase(signal_id) % 2)
+    phase_class = current_phase_class(adapter, signal_id)
+    phase = float(phase_class if phase_class is not None else 0)
     mode = 0.5 if "y" in state.lower() or not any(v in state for v in "Gg") else 0.0
     return np.asarray(
         [
@@ -103,10 +128,12 @@ def run_once(
                 with torch.no_grad():
                     actions = policy(torch.as_tensor(observations)).argmax(dim=1).numpy()
                 for signal, action in zip(signal_ids, actions, strict=True):
-                    current_class = int(traci.trafficlight.getPhase(signal) % 2)
+                    current_class = current_phase_class(adapter, signal)
+                    if current_class is None:
+                        continue
                     desired = int(action) - 1 if int(action) else current_class
                     if (
-                        ages[signal] >= 20
+                        ages[signal] >= args.minimum_green
                         and desired != current_class
                         and adapter.request_next_safe_phase(signal)
                     ):
@@ -157,10 +184,10 @@ def main() -> None:
     runs = [
         run_once(args, controller, policy, seed)
         for seed in args.seeds
-        for controller in ("native", "shared_dqn")
+        for controller in args.controllers
     ]
     summary: dict[str, dict[str, float]] = {}
-    for controller in ("native", "shared_dqn"):
+    for controller in args.controllers:
         group = [run for run in runs if run["controller"] == controller]
         summary[controller] = {
             key: float(np.mean([float(run[key]) for run in group]))

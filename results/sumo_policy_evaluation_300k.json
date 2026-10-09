@@ -1,0 +1,315 @@
+{
+  "status": "measured",
+  "scenario": "Central Lemgo, Germany (OpenStreetMap)",
+  "model": "models\\grid_shared_dqn_300k_seed_1.pt",
+  "runs": [
+    {
+      "controller": "native",
+      "steps": 900,
+      "seed": 42,
+      "signals": 9,
+      "controlled_lanes": 48,
+      "departed": 426,
+      "arrived": 232,
+      "vehicles_remaining": 269,
+      "mean_queue": 20.557777777777776,
+      "peak_queue": 46.0,
+      "mean_waiting_seconds": 1181.0277777777778,
+      "requested_safe_transitions": 0,
+      "collisions": 0,
+      "collision_details": []
+    },
+    {
+      "controller": "shared_dqn",
+      "steps": 900,
+      "seed": 42,
+      "signals": 9,
+      "controlled_lanes": 48,
+      "departed": 429,
+      "arrived": 230,
+      "vehicles_remaining": 271,
+      "mean_queue": 20.083333333333332,
+      "peak_queue": 40.0,
+      "mean_waiting_seconds": 1072.7133333333334,
+      "requested_safe_transitions": 182,
+      "collisions": 0,
+      "collision_details": []
+    },
+    {
+      "controller": "native",
+      "steps": 900,
+      "seed": 43,
+      "signals": 9,
+      "controlled_lanes": 48,
+      "departed": 427,
+      "arrived": 233,
+      "vehicles_remaining": 268,
+      "mean_queue": 20.125555555555554,
+      "peak_queue": 44.0,
+      "mean_waiting_seconds": 1183.5444444444445,
+      "requested_safe_transitions": 0,
+      "collisions": 0,
+      "collision_details": []
+    },
+    {
+      "controller": "shared_dqn",
+      "steps": 900,
+      "seed": 43,
+      "signals": 9,
+      "controlled_lanes": 48,
+      "departed": 427,
+      "arrived": 233,
+      "vehicles_remaining": 268,
+      "mean_queue": 20.44333333333333,
+      "peak_queue": 40.0,
+      "mean_waiting_seconds": 1126.3466666666666,
+      "requested_safe_transitions": 180,
+      "collisions": 0,
+      "collision_details": []
+    },
+    {
+      "controller": "native",
+      "steps": 900,
+      "seed": 44,
+      "signals": 9,
+      "controlled_lanes": 48,
+      "departed": 427,
+      "arrived": 225,
+      "vehicles_remaining": 276,
+      "mean_queue": 21.886666666666667,
+      "peak_queue": 45.0,
+      "mean_waiting_seconds": 1210.83,
+      "requested_safe_transitions": 0,
+      "collisions": 0,
+      "collision_details": []
+    },
+    {
+      "controller": "shared_dqn",
+      "steps": 900,
+      "seed": 44,
+      "signals": 9,
+      "controlled_lanes": 48,
+      "departed": 425,
+      "arrived": 226,
+      "vehicles_remaining": 274,
+      "mean_queue": 20.453333333333333,
+      "peak_queue": 43.0,
+      "mean_waiting_seconds": 1074.4888888888888,
+      "requested_safe_transitions": 180,
+      "collisions": 0,
+      "collision_details": []
+    },
+    {
+      "controller": "native",
+      "steps": 900,
+      "seed": 45,
+      "signals": 9,
+      "controlled_lanes": 48,
+      "departed": 429,
+      "arrived": 229,
+      "vehicles_remaining": 272,
+      "mean_queue": 20.393333333333334,
+      "peak_queue": 43.0,
+      "mean_waiting_seconds": 1139.4944444444445,
+      "requested_safe_transitions": 0,
+      "collisions": 0,
+      "collision_details": []
+    },
+    {
+      "controller": "shared_dqn",
+      "steps": 900,
+      "seed": 45,
+      "signals": 9,
+      "controlled_lanes": 48,
+      "departed": 428,
+      "arrived": 227,
+      "vehicles_remaining": 274,
+      "mean_queue": 21.052222222222223,
+      "peak_queue": 41.0,
+      "mean_waiting_seconds": 1088.4622222222222,
+      "requested_safe_transitions": 181,
+      "collisions": 0,
+      "collision_details": []
+    },
+    {
+      "controller": "native",
+      "steps": 900,
+      "seed": 46,
+      "signals": 9,
+      "controlled_lanes": 48,
+      "departed": 428,
+      "arrived": 232,
+      "vehicles_remaining": 269,
+      "mean_queue": 20.628888888888888,
+      "peak_queue": 46.0,
+      "mean_waiting_seconds": 1157.8366666666666,
+      "requested_safe_transitions": 0,
+      "collisions": 0,
+      "collision_details": []
+    },
+    {
+      "controller": "shared_dqn",
+      "steps": 900,
+      "seed": 46,
+      "signals": 9,
+      "controlled_lanes": 48,
+      "departed": 428,
+      "arrived": 229,
+      "vehicles_remaining": 271,
+      "mean_queue": 21.281111111111112,
+      "peak_queue": 43.0,
+      "mean_waiting_seconds": 1150.6533333333334,
+      "requested_safe_transitions": 181,
+      "collisions": 0,
+      "collision_details": []
+    }
+  ],
+  "summary_mean": {
+    "native": {
+      "arrived": 230.2,
+      "vehicles_remaining": 270.8,
+      "mean_queue": 20.71844444444444,
+      "peak_queue": 44.8,
+      "mean_waiting_seconds": 1174.5466666666666,
+      "collisions": 0.0
+    },
+    "shared_dqn": {
+      "arrived": 229.0,
+      "vehicles_remaining": 271.6,
+      "mean_queue": 20.662666666666667,
+      "peak_queue": 41.4,
+      "mean_waiting_seconds": 1102.532888888889,
+      "collisions": 0.0
+    }
+  },
+  "safety_note": "TraCI requests shorten only active green phases; native yellow/all-red transitions remain in control.",
+  "summary_statistics": {
+    "native": {
+      "arrived": {
+        "mean": 230.2,
+        "std": 3.271085446759225,
+        "ci95_low": 226.1390620984802,
+        "ci95_high": 234.26093790151978
+      },
+      "vehicles_remaining": {
+        "mean": 270.8,
+        "std": 3.271085446759225,
+        "ci95_low": 266.7390620984802,
+        "ci95_high": 274.86093790151983
+      },
+      "mean_queue": {
+        "mean": 20.71844444444444,
+        "std": 0.6811372117529393,
+        "ci95_low": 19.87283647596919,
+        "ci95_high": 21.56405241291969
+      },
+      "peak_queue": {
+        "mean": 44.8,
+        "std": 1.3038404810405297,
+        "ci95_low": 43.18132775399094,
+        "ci95_high": 46.41867224600905
+      },
+      "mean_waiting_seconds": {
+        "mean": 1174.5466666666666,
+        "std": 27.14464710889911,
+        "ci95_low": 1140.8475389422229,
+        "ci95_high": 1208.2457943911104
+      },
+      "collisions": {
+        "mean": 0.0,
+        "std": 0.0,
+        "ci95_low": 0.0,
+        "ci95_high": 0.0
+      }
+    },
+    "shared_dqn": {
+      "arrived": {
+        "mean": 229.0,
+        "std": 2.7386127875258306,
+        "ci95_low": 225.60010823701694,
+        "ci95_high": 232.39989176298306
+      },
+      "vehicles_remaining": {
+        "mean": 271.6,
+        "std": 2.5099800796022267,
+        "ci95_low": 268.4839477282947,
+        "ci95_high": 274.71605227170534
+      },
+      "mean_queue": {
+        "mean": 20.662666666666667,
+        "std": 0.49035235504560043,
+        "ci95_low": 20.053911409087867,
+        "ci95_high": 21.271421924245466
+      },
+      "peak_queue": {
+        "mean": 41.4,
+        "std": 1.5165750888103102,
+        "ci95_low": 39.51722519668442,
+        "ci95_high": 43.282774803315576
+      },
+      "mean_waiting_seconds": {
+        "mean": 1102.532888888889,
+        "std": 34.48307075782101,
+        "ci95_low": 1059.7233654813117,
+        "ci95_high": 1145.3424122964661
+      },
+      "collisions": {
+        "mean": 0.0,
+        "std": 0.0,
+        "ci95_low": 0.0,
+        "ci95_high": 0.0
+      }
+    }
+  },
+  "paired_dqn_vs_native": {
+    "arrived": {
+      "mean": -1.2,
+      "std": 1.6431676725154984,
+      "ci95_low": -3.2399350577898307,
+      "ci95_high": 0.8399350577898306,
+      "improvement_percent": 0.5212858384013852,
+      "statistically_significant_95": false
+    },
+    "vehicles_remaining": {
+      "mean": 0.8,
+      "std": 1.7888543819998315,
+      "ci95_low": -1.4207999999999992,
+      "ci95_high": 3.0207999999999995,
+      "improvement_percent": -0.2954209748892213,
+      "statistically_significant_95": false
+    },
+    "mean_queue": {
+      "mean": -0.05577777777777726,
+      "std": 0.89784426321476,
+      "ci95_low": -1.17041995313374,
+      "ci95_high": 1.0588643975781855,
+      "improvement_percent": 0.26921798075786657,
+      "statistically_significant_95": false
+    },
+    "peak_queue": {
+      "mean": -3.4,
+      "std": 1.6733200530681511,
+      "ci95_low": -5.477368181136892,
+      "ci95_high": -1.3226318188631079,
+      "improvement_percent": 7.589285714285713,
+      "statistically_significant_95": true
+    },
+    "mean_waiting_seconds": {
+      "mean": -72.01377777777779,
+      "std": 50.78993569255945,
+      "ci95_low": -135.0677023012143,
+      "ci95_high": -8.959853254341297,
+      "improvement_percent": 6.131197663022702,
+      "statistically_significant_95": true
+    },
+    "collisions": {
+      "mean": 0.0,
+      "std": 0.0,
+      "ci95_low": 0.0,
+      "ci95_high": 0.0,
+      "improvement_percent": 0.0,
+      "statistically_significant_95": false
+    }
+  },
+  "statistical_note": "Paired by SUMO seed; 95% Student-t intervals for five held-out seeds."
+}

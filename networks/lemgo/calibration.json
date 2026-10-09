@@ -1,0 +1,26 @@
+{
+  "status": "calibrated_proxy",
+  "location": "OWL322 intersection, Lemgo, Germany",
+  "source_repository": "https://github.com/RL-INA/LemgoRL",
+  "catalog_record": "https://data.gov.de/suche/daten/simulationsmodell-ki-schnittstelle-und-verkehrszahldaten-einer-kreuzung-in-der-alten-hansestadt",
+  "source_files": [
+    "envs/sumo_files_owl322/od_flows.rou.xml",
+    "envs/sumo_files_owl322/pedestrian_flows.rou.xml"
+  ],
+  "source_window": "2020 afternoon rush hour, 15:00–15:20",
+  "five_minute_motorized_probabilities_per_second": [0.387, 0.501, 0.426, 0.471],
+  "five_minute_pedestrian_probabilities_per_second": [0.0233333333, 0.0166666667, 0.03, 0.0066666667],
+  "normalized_motorized_profile": [0.867, 1.123, 0.955, 1.055],
+  "grid_mapping": {
+    "boundary_arrival_rate_per_second": 0.225,
+    "pedestrian_rate_per_node_second": 0.018,
+    "bicycle_rate_per_node_second": 0.003,
+    "left_turn_ratio": 0.18,
+    "right_turn_ratio": 0.12
+  },
+  "limitations": [
+    "OWL322 is one intersection; the demand is scaled across the four-node abstract grid.",
+    "The committed central-Lemgo OSM network is geometrically different from OWL322.",
+    "This is a research calibration proxy, not current municipal detector data or field validation."
+  ]
+}
